@@ -26,19 +26,17 @@ class php::params {
           $ext_tool_enable  = '/usr/sbin/php5enmod'
           $ext_tool_query   = '/usr/sbin/php5query'
           $fpm_default_params = {
-              $name => {
-                  'user'                 => 'www-data',
-                  'group'                => 'www-data',
-                  'listen'               => '/var/run/php5-fpm.sock',
-                  'listen.owner'         => 'www-data',
-                  'listen.group'         => 'www-data',
-                  'pm'                   => dynamic,
-                  'pm.max_children'      => 5,
-                  'pm.start_servers'     => 2,
-                  'pm.min_spare_servers' => 1,
-                  'pm.max_spare_servers' => 3,
-                  'chdir'                => '/'
-              }
+              'user'                 => 'www-data',
+              'group'                => 'www-data',
+              'listen'               => '/var/run/php5-fpm.sock',
+              'listen.owner'         => 'www-data',
+              'listen.group'         => 'www-data',
+              'pm'                   => dynamic,
+              'pm.max_children'      => 5,
+              'pm.start_servers'     => 2,
+              'pm.min_spare_servers' => 1,
+              'pm.max_spare_servers' => 3,
+              'chdir'                => '/'
           }
           case $::lsbdistcodename {
               'wheezy': {
