@@ -2,7 +2,7 @@
 class php::fpm::service(
 ) inherits php::params {
 
-    create_ini_settings($php::fpm_service_settings, {'path' => $php::params::fpm_config_file}) ~> Service[$php::params::fpm_service_name]
+    create_ini_settings($php::fpm_service_settings, {'path' => $php::params::fpm_config_file})
 
     service { $php::params::fpm_service_name:
         ensure     => $php::fpm_service_ensure,
