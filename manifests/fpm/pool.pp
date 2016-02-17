@@ -4,8 +4,10 @@ define php::fpm::pool (
 ) {
     $file = "${php::params::fpm_pool_dir}${name}.conf"
 
+    $merged_config = merge($php::params::fpm_default_params, $params)
+
     $settings = {
-        $title => merge($php::params::fpm_default_params, $params)
+        $title => $merged_config
     }
 
     file { $file:
