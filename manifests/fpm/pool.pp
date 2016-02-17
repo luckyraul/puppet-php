@@ -10,6 +10,10 @@ define php::fpm::pool (
         "${title}" => $merged_config
     }
 
+    notify{"{title} The value is: ${settings}": }
+
+
+
     file { $file:
         ensure => $ensure,
         mode   => '0644',
