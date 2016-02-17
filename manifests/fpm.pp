@@ -12,7 +12,7 @@ class php::fpm (
     anchor { 'php::fpm::begin': } ->
     package { $real_package:
       ensure  => $ensure,
-      require => Class['::php::packages'],
+      require => Class['php::packages'],
     } ->
     class { 'php::fpm::service': } ->
     anchor { 'php::fpm::end': }
