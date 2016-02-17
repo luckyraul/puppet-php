@@ -1,0 +1,42 @@
+# == Class: php
+class php (
+    $version      = $php::params::version,
+    $ensure       = $php::params::ensure,
+    $manage_repos = $php::params::manage_repos,
+    $packages     = [],
+    $fpm          = true,
+    $dev          = false,
+    $composer     = true,
+    $phpunit      = false,
+    ) inherits php::params {
+
+    validate_string($ensure)
+    validate_bool($fpm)
+    validate_bool($dev)
+    validate_bool($composer)
+    validate_bool($phpunit)
+
+
+    if $manage_repos {
+        class { 'php::repo': 'version' => $version} -> Anchor['php::begin']
+    }
+
+    anchor { 'php::begin': } -> class { 'php::packages': } -> anchor { 'php::end': }
+
+    if $fpm {
+        Anchor['php::begin'] -> class { 'php::fpm':} -> Anchor['php::end']
+    }
+
+    if $dev {
+        Anchor['php::begin'] -> class { 'php::dev':} -> Anchor['php::end']
+    }
+
+    if $composer {
+        Anchor['php::begin'] -> class { 'php::composer':} -> Anchor['php::end']
+    }
+
+    if $phpunit {
+        Anchor['php::begin'] -> class { 'php::phpunit':} -> Anchor['php::end']
+    }
+
+}

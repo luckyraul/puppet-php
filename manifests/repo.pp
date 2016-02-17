@@ -1,0 +1,71 @@
+# == Class: php::repo
+class php::repo(
+        $version  = undef,
+        $repos    = 'all',
+        $location = 'http://packages.dotdeb.org',
+        $key      = {
+            'id'     => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
+            'source' => 'http://www.dotdeb.org/dotdeb.gpg',
+        }
+    )
+{
+    include '::apt'
+    create_resources(::apt::key, { 'php::repo' => {
+        key => $key['id'], key_source => $key['source'],
+    }})
+
+    if $version {
+        case $version {
+            '5.5': {
+                case $::lsbdistcodename {
+                    'wheezy': {
+                        $release = "${::lsbdistcodename}-php55"
+                    }
+                    default: {
+                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                    }
+                }
+            }
+            '5.6': {
+                case $::lsbdistcodename {
+                    'wheezy': {
+                        $release = "${::lsbdistcodename}-php56"
+                    }
+                    default: {
+                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                    }
+                }
+            }
+            '7.0': {
+                case $::lsbdistcodename {
+                    'jessie': {
+                        $release = $::lsbdistcodename
+                    }
+                    default: {
+                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                    }
+                }
+            }
+        }
+    } else {
+        case $::lsbdistcodename {
+            'wheezy': {
+                $release = "${::lsbdistcodename}-php55"
+            }
+            'jessie': {
+                $release = $::lsbdistcodename
+            }
+            default: {
+                fail("Unsupported release: ${::lsbdistcodename}")
+            }
+        }
+    }
+
+    ::apt::source { "source_php_${release}":
+        location    => $location,
+        release     => $release,
+        repos       => $repos,
+        include_src => false,
+        require     => Apt::Key['php::repo'],
+    }
+}
