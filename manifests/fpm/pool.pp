@@ -28,7 +28,6 @@ define php::fpm::pool (
             notify  => Class['php::fpm::service'],
             require => Package[$real_package],
         }
+        create_ini_settings($settings, {'path' => $file, require => File[$file]})
     }
-
-    create_ini_settings($settings, {'path' => $file, require => File[$file]})
 }
