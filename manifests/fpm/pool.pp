@@ -21,12 +21,13 @@ define php::fpm::pool (
         }
     } else {
         file { $file:
-            ensure  => $ensure,
+            ensure  => file,
             mode    => '0644',
             owner   => root,
             group   => root,
             notify  => Class['php::fpm::service'],
             require => Package[$real_package],
+            content => template('php/fpm/pool.conf.erb'),
         }
         create_ini_settings($settings, {'path' => $file, require => File[$file]})
     }
