@@ -1,6 +1,6 @@
 # == Class: php::repo
 class php::repo(
-        $version  = undef,
+        $version  = $php::version,
         $repos    = 'all',
         $location = 'http://packages.dotdeb.org',
         $key      = {
