@@ -12,13 +12,22 @@ define php::fpm::pool (
 
     notify{"{title} The value is: ${settings}": }
 
+    $real_package = "${php::params::package_prefix}${php::params::fpm_package}",
 
-
-    file { $file:
-        ensure => $ensure,
-        mode   => '0644',
-        owner  => root,
-        group  => root
+    if ($ensure == 'absent') {
+        file { $file:
+            ensure => $ensure,
+            notify => Class['php::fpm::service'],
+        }
+    } else {
+        file { $file:
+            ensure  => $ensure,
+            mode    => '0644',
+            owner   => root,
+            group   => root,
+            notify  => Class['php::fpm::service'],
+            require => Package[$real_package],
+        }
     }
 
     create_ini_settings($settings, {'path' => $file})
