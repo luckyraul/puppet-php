@@ -34,6 +34,7 @@ class php (
     $fpm          = true,
     $fpm_service_ensure = $php::params::fpm_service_ensure,
     $fpm_service_enable = $php::params::fpm_service_enable,
+    $fpm_service_settings = $php::params::fpm_service_settings,
     $dev          = false,
     $composer     = true,
     $phpunit      = false,

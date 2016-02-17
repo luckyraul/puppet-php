@@ -8,11 +8,18 @@ class php::params {
     $fpm_pools        = { 'www' => {} }
     $fpm_service_enable  = true
     $fpm_service_ensure  = 'running'
+    $fpm_service_settings = {
+        'global' {
+            'daemonize': 'yes'
+        }
+    }
     case $::operatingsystem {
         'Debian': {
+          $config_root = '/etc/php5'
           $common_package = ['cli','common']
           $dev_package = 'dev'
           $fpm_package = 'fpm'
+          $fpm_config_file = "${config_root}/fpm/php-fpm.conf"
           $fpm_service_name = 'php5-fpm'
           $package_prefix = 'php5-'
           $ext_tool_enable  = '/usr/sbin/php5enmod'
