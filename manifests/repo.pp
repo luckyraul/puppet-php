@@ -9,55 +9,47 @@ class php::repo(
         }
     )
 {
+
+    validate_string($version)
+
     include '::apt'
     create_resources(::apt::key, { 'php::repo' => {
         key => $key['id'], key_source => $key['source'],
     }})
 
-    if $version {
-        case $version {
-            '5.5': {
-                case $::lsbdistcodename {
-                    'wheezy': {
-                        $release = "${::lsbdistcodename}-php55"
-                    }
-                    default: {
-                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
-                    }
+    case $version {
+        '5.5': {
+            case $::lsbdistcodename {
+                'wheezy': {
+                    $release = $php::params::release
                 }
-            }
-            '5.6': {
-                case $::lsbdistcodename {
-                    'wheezy': {
-                        $release = "${::lsbdistcodename}-php56"
-                    }
-                    default: {
-                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
-                    }
-                }
-            }
-            '7.0': {
-                case $::lsbdistcodename {
-                    'jessie': {
-                        $release = $::lsbdistcodename
-                    }
-                    default: {
-                        fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
-                    }
+                default: {
+                    fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
                 }
             }
         }
-    } else {
-        case $::lsbdistcodename {
-            'wheezy': {
-                $release = "${::lsbdistcodename}-php55"
+        '5.6': {
+            case $::lsbdistcodename {
+                'wheezy': {
+                    $release = "${::lsbdistcodename}-php56"
+                }
+                default: {
+                    fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                }
             }
-            'jessie': {
-                $release = $::lsbdistcodename
+        }
+        '7.0': {
+            case $::lsbdistcodename {
+                'jessie': {
+                    $release = $php::params::release
+                }
+                default: {
+                    fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                }
             }
-            default: {
-                fail("Unsupported release: ${::lsbdistcodename}")
-            }
+        }
+        default: {
+            fail("Unsupported PHP release: ${version}")
         }
     }
 

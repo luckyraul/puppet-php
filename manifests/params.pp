@@ -1,6 +1,5 @@
 # == Class: php::params
 class php::params {
-    $version = undef
     $ensure = present
     $composer_source  = 'https://getcomposer.org/composer.phar'
     $composer_path    = '/usr/local/bin/composer'
@@ -15,7 +14,21 @@ class php::params {
           $package_prefix = 'php5-'
           $ext_tool_enable  = '/usr/sbin/php5enmod'
           $ext_tool_query   = '/usr/sbin/php5query'
-          $manage_repos = true
+          case $::lsbdistcodename {
+              'wheezy': {
+                  $version = '5.5'
+                  $release = 'wheezy-php55'
+                  $manage_repos = true
+              }
+              'jessie': {
+                  $version = '5.6'
+                  $release = $::lsbdistcodename
+                  $manage_repos = false
+              }
+              default: {
+                  fail("Unsupported release: ${::lsbdistcodename}")
+              }
+          }
         }
         default: {
             fail("Unsupported os: ${::operatingsystem}")
