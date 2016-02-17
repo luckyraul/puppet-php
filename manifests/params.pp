@@ -9,8 +9,8 @@ class php::params {
     $fpm_service_enable  = true
     $fpm_service_ensure  = 'running'
     $fpm_service_settings = {
-        'global': {
-            'daemonize': 'yes'
+        'global' => {
+            'daemonize' => 'yes'
         }
     }
     case $::operatingsystem {
