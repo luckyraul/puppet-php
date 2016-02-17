@@ -18,7 +18,7 @@ class php (
 
 
     if $manage_repos {
-        class { 'php::repo': 'version' => $version} -> Anchor['php::begin']
+        class { 'php::repo': 'version' => $version } -> Anchor['php::begin']
     }
 
     anchor { 'php::begin': } -> class { 'php::packages': } -> anchor { 'php::end': }
