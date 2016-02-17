@@ -12,7 +12,7 @@ define php::fpm::pool (
 
     notify{"{title} The value is: ${settings}": }
 
-    $real_package = "${php::params::package_prefix}${php::params::fpm_package}",
+    $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
 
     if ($ensure == 'absent') {
         file { $file:
