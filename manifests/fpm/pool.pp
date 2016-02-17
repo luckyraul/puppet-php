@@ -30,5 +30,5 @@ define php::fpm::pool (
         }
     }
 
-    create_ini_settings($settings, {'path' => $file})
+    create_ini_settings($settings, {'path' => $file, require => File[$file]})
 }
