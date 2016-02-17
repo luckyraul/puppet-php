@@ -16,4 +16,6 @@ class php::fpm (
     } ->
     class { 'php::fpm::service': } ->
     anchor { 'php::fpm::end': }
+
+    create_resources(php::fpm::pool, $pools)
 }

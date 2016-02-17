@@ -19,11 +19,27 @@ class php::params {
           $common_package = ['cli','common']
           $dev_package = 'dev'
           $fpm_package = 'fpm'
+          $fpm_pool_dir = "${config_root}/fpm/pool.d/"
           $fpm_config_file = "${config_root}/fpm/php-fpm.conf"
           $fpm_service_name = 'php5-fpm'
           $package_prefix = 'php5-'
           $ext_tool_enable  = '/usr/sbin/php5enmod'
           $ext_tool_query   = '/usr/sbin/php5query'
+          $fpm_default_params = {
+              $name => {
+                  'user'                 => 'www-data',
+                  'group'                => 'www-data',
+                  'listen'               => '/var/run/php5-fpm.sock',
+                  'listen.owner'         => 'www-data',
+                  'listen.group'         => 'www-data',
+                  'pm'                   => dynamic,
+                  'pm.max_children'      => 5,
+                  'pm.start_servers'     => 2,
+                  'pm.min_spare_servers' => 1,
+                  'pm.max_spare_servers' => 3,
+                  'chdir'                => '/'
+              }
+          }
           case $::lsbdistcodename {
               'wheezy': {
                   $version = '5.5'

@@ -27,17 +27,17 @@
 #   Install phpunit
 
 class php (
-    $version      = $php::params::version,
-    $ensure       = $php::params::ensure,
-    $manage_repos = $php::params::manage_repos,
-    $packages     = [],
-    $fpm          = true,
-    $fpm_service_ensure = $php::params::fpm_service_ensure,
-    $fpm_service_enable = $php::params::fpm_service_enable,
+    $version              = $php::params::version,
+    $ensure               = $php::params::ensure,
+    $manage_repos         = $php::params::manage_repos,
+    $packages             = [],
+    $fpm                  = true,
+    $fpm_service_ensure   = $php::params::fpm_service_ensure,
+    $fpm_service_enable   = $php::params::fpm_service_enable,
     $fpm_service_settings = $php::params::fpm_service_settings,
-    $dev          = false,
-    $composer     = true,
-    $phpunit      = false,
+    $dev                  = false,
+    $composer             = true,
+    $phpunit              = false,
     ) inherits php::params {
 
     validate_string($ensure)
