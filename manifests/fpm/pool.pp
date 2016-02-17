@@ -3,7 +3,11 @@ define php::fpm::pool (
     $params = {}
 ) {
     $file = "${php::params::fpm_pool_dir}${name}.conf"
-    $settings = {$name => merge($php::params::fpm_default_params, $params)}
+
+    $settings = {
+        $title => merge($php::params::fpm_default_params, $params)
+    }
+
     file { $file:
         ensure => $ensure,
         mode   => '0644',
