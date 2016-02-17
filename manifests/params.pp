@@ -6,11 +6,14 @@ class php::params {
     $phpunit_source   = 'https://phar.phpunit.de/phpunit.phar'
     $phpunit_path     = '/usr/local/bin/phpunit'
     $fpm_pools        = { 'www' => {} }
+    $fpm_service_enable  = true
+    $fpm_service_ensure  = 'running'
     case $::operatingsystem {
         'Debian': {
           $common_package = ['cli','common']
           $dev_package = 'dev'
           $fpm_package = 'fpm'
+          $fpm_service_name = 'php5-fpm'
           $package_prefix = 'php5-'
           $ext_tool_enable  = '/usr/sbin/php5enmod'
           $ext_tool_query   = '/usr/sbin/php5query'

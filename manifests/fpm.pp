@@ -14,5 +14,6 @@ class php::fpm (
       ensure  => $ensure,
       require => Class['::php::packages'],
     } ->
+    class { 'php::fpm::service': } ->
     anchor { 'php::fpm::end': }
 }
