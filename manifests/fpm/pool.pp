@@ -7,7 +7,7 @@ define php::fpm::pool (
     $merged_config = merge($php::params::fpm_default_params, $params)
 
     $settings = {
-        $title => $merged_config
+        "${title}" => $merged_config
     }
 
     file { $file:
