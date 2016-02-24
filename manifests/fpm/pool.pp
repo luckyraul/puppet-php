@@ -10,7 +10,7 @@ define php::fpm::pool (
         "${title}" => $merged_config
     }
 
-    notify{"{title} The value is: ${settings}": }
+    #notify{"{title} The value is: ${settings}": }
 
     $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
 
