@@ -1,3 +1,4 @@
+#
 class php::packages (
     $ensure         = $php::ensure,
     $common_names   = $php::params::common_package,

@@ -23,6 +23,17 @@ class php::repo(
                 'wheezy': {
                     $release = $php::params::release
                 }
+                'jessie': {
+                    $release = 'wheezy-php55'
+                    $merge_names = union($php::packages, $php::params::common_package)
+                    $package_list = prefix($merge_names, $php::params::package_prefix)
+                    apt::pin { 'downgrade_php':
+                      ensure   => 'present',
+                      packages => [$package_list],
+                      priority => 500,
+                      release  => $release,
+                    }
+                }
                 default: {
                     fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
                 }
