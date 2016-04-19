@@ -27,6 +27,16 @@ class php::repo(
                     $release = 'wheezy-php55'
                     $merge_names = union($php::packages, $php::params::common_package)
                     $package_list = prefix($merge_names, $php::params::package_prefix)
+
+                    ::apt::source { 'oldstable':
+                        location => 'http://httpredir.debian.org/debian/',
+                        release  => 'wheezy',
+                        repos    => 'main contrib',
+                        include  => {
+                           'src' => false,
+                        },
+                        require  => Apt::Key['php::repo'],
+                    }
                     apt::pin { 'downgrade_php':
                       ensure   => 'present',
                       packages => [$package_list],
@@ -65,10 +75,12 @@ class php::repo(
     }
 
     ::apt::source { "source_php_${release}":
-        location    => $location,
-        release     => $release,
-        repos       => $repos,
-        include_src => false,
-        require     => Apt::Key['php::repo'],
+        location => $location,
+        release  => $release,
+        repos    => $repos,
+        include  => {
+           'src' => false
+        },
+        require  => Apt::Key['php::repo'],
     }
 }
