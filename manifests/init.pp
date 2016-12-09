@@ -38,6 +38,7 @@ class php (
     $dev                  = false,
     $composer             = true,
     $phpunit              = false,
+    $newrelic             = false,
     ) inherits php::params {
 
     validate_string($ensure)
@@ -59,6 +60,10 @@ class php (
 
     if $dev {
         Anchor['php::begin'] -> class { 'php::dev':} -> Anchor['php::end']
+    }
+
+    if $newrelic {
+        Class['php::packages'] -> class { 'php::newrelic':} -> Anchor['php::end']
     }
 
     if $composer {
