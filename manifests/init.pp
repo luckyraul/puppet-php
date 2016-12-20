@@ -39,6 +39,7 @@ class php (
     $composer             = true,
     $phpunit              = false,
     $newrelic             = false,
+    $settings             = {},
     ) inherits php::params {
 
     validate_string($ensure)
@@ -46,13 +47,17 @@ class php (
     validate_bool($dev)
     validate_bool($composer)
     validate_bool($phpunit)
+    validate_hash($settings)
 
 
     if $manage_repos {
         class { 'php::repo': } -> Anchor['php::begin']
     }
 
-    anchor { 'php::begin': } -> class { 'php::packages': } -> anchor { 'php::end': }
+    anchor { 'php::begin': }
+      -> class { 'php::packages': }
+      -> class { 'php::config': }
+      -> anchor { 'php::end': }
 
     if $fpm {
         Anchor['php::begin'] -> class { 'php::fpm':} -> Anchor['php::end']

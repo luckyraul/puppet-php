@@ -10,8 +10,16 @@ class php::params {
     $fpm_service_ensure  = 'running'
     $fpm_service_settings = {
         'global' => {
-            'daemonize' => 'yes'
+            'daemonize' => 'yes',
         }
+    }
+
+    $opc_config =  {
+      '' => {
+        'opcache.memory_consumption' => '128',
+        'opcache.max_accelerated_files' => '99000',
+        'opcache.enable_cli' => '1',
+      },
     }
     case $::operatingsystem {
         'Debian': {
@@ -46,6 +54,15 @@ class php::params {
               }
               'jessie': {
                   $version = '5.6'
+                  $default_config = {
+                    'PHP' => {
+                      'short_open_tag' => 'On',
+                      'always_populate_raw_post_data' => '-1',
+                    },
+                    'Date' => {
+                      'date.timezone' => '"Europe/Moscow"',
+                    }
+                  }
                   $release = $::lsbdistcodename
                   $manage_repos = false
               }
