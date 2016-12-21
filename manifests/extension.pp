@@ -2,6 +2,7 @@
 define php::extension (
   $ensure = 'installed',
   $provider = undef,
+  $priority = 20,
 ) {
   validate_string($ensure)
 
@@ -19,4 +20,17 @@ define php::extension (
         Class['php::dev'],
     ],
   }
+
+  file {"${php::params::config_root}/mods-available/${name}.ini":
+    content => "; Managed by puppet\n; priority=${priority}\nextension=${name}.so\n",
+    notify  => Exec["enabling_${name}"],
+  }
+
+  exec { "enabling_${name}":
+    cwd         => '/tmp',
+    command     => "php5enmod ${name}",
+    refreshonly => true,
+  }
+
+  Package[$real_package] -> File["${php::params::config_root}/mods-available/${name}.ini"] -> Exec["enabling_${name}"]
 }
