@@ -36,10 +36,12 @@ class php (
     $fpm_service_enable   = $php::params::fpm_service_enable,
     $fpm_service_settings = $php::params::fpm_service_settings,
     $dev                  = false,
+    $pear                 = false,
     $composer             = true,
     $phpunit              = false,
     $newrelic             = false,
     $settings             = {},
+    $extensions           = {},
     ) inherits php::params {
 
     validate_string($ensure)
@@ -59,8 +61,17 @@ class php (
       -> class { 'php::config': }
       -> anchor { 'php::end': }
 
+    create_resources('php::extension', $extensions, {
+      require => Class['php::config'],
+      before  => Anchor['php::end']
+    })
+
     if $fpm {
         Anchor['php::begin'] -> class { 'php::fpm':} -> Anchor['php::end']
+    }
+
+    if $pear {
+        Anchor['php::begin'] -> class { 'php::pear':} -> Anchor['php::end']
     }
 
     if $dev {
