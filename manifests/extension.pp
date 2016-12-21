@@ -6,6 +6,10 @@ define php::extension (
 ) {
   validate_string($ensure)
 
+  Exec {
+    path => ['/bin', '/usr/bin','/usr/sbin']
+  }
+
   if $provider == 'pecl' {
       $real_package = "pecl-${name}"
   } else {
