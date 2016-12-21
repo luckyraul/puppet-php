@@ -1,88 +1,105 @@
 require 'puppet/provider/package'
 
 Puppet::Type.type(:package).newparam(:pipe)
-Puppet::Type.type(:package).provide :pecl, parent: Puppet::Provider::Package do
-  desc 'PHP pecl support. By default uses the installed channels, but you can specify the path to a pecl package via ``source``.'
+Puppet::Type.type(:package).provide :pecl, :parent => Puppet::Provider::Package do
+  desc "PHP pecl support. By default uses the installed channels, but you can specify the path to a pecl package via ``source``."
 
   has_feature :versionable
   has_feature :upgradeable
 
   case Facter.value(:operatingsystem)
-  when 'Solaris'
-    commands peclcmd: '/opt/coolstack/php5/bin/pecl'
-  else
-    commands peclcmd: 'pecl'
+    when "Solaris"
+      commands :peclcmd => "/opt/coolstack/php5/bin/pecl"
+    else
+      commands :peclcmd => "pecl"
   end
 
   def self.pecllist(hash)
-    command = [command(:peclcmd), 'list']
+    command = [command(:peclcmd), "list"]
 
     begin
-      list = execute(command).split("\n").map do |set|
-        if hash[:justme] && %r{^#{hash[:justme]}$}i =~ set && (peclhash = peclsplit(set))
-          peclhash[:provider] = :peclcmd
-          peclhash
-        elsif (peclhash = peclsplit(set))
-          peclhash[:provider] = :peclcmd
-          peclhash
+      list = execute(command).split("\n").collect do |set|
+        if hash[:justme]
+          if /^#{hash[:justme]}$/i.match(set)
+            if peclhash = peclsplit(set)
+              peclhash[:provider] = :peclcmd
+              peclhash
+            else
+              nil
+            end
+          else
+            nil
+          end
+        else
+          if peclhash = peclsplit(set)
+            peclhash[:provider] = :peclcmd
+            peclhash
+          else
+            nil
+          end
         end
-      end.compact
+      end.reject { |p| p.nil? }
     rescue Puppet::ExecutionFailure => detail
-      raise Puppet::Error, format('Could not list pecls: %s', detail)
+      raise Puppet::Error, "Could not list pecls: %s" % detail
     end
 
-    return list.shift if hash[:justme]
-    list
+    if hash[:justme]
+      return list.shift
+    else
+      return list
+    end
   end
 
   def self.peclsplit(desc)
     desc.strip!
 
     case desc
-    when %r{^INSTALLED} then return nil
-    when %r{No packages installed from channel}i then return nil
-    when %r{^=} then return nil
-    when %r{^PACKAGE} then return nil
-    when %r{\[1m} then return nil # Newer versions of PEAR use colorized output
-    when %r{^(\S+)\s+(\S+)\s+\S+} then
-      name = Regexp.last_match(1)
-      version = Regexp.last_match(2)
+    when /^INSTALLED/ then return nil
+    when /No packages installed from channel/i then return nil
+    when /^=/ then return nil
+    when /^PACKAGE/ then return nil
+    when /\[1m/ then return nil       # Newer versions of PEAR use colorized output
+    when /^(\S+)\s+(\S+)\s+\S+/ then
+      name = $1
+      version = $2
 
       return {
-        name: "pecl-#{name.downcase}",
-        ensure: version
+        :name => "pecl-#{name.downcase}",
+        :ensure => version
       }
     else
-      Puppet.warning format('Could not match %s', desc)
+      Puppet.warning "Could not match %s" % desc
       nil
     end
   end
 
   def self.instances
-    pecllist(local: true).map do |hash|
+    pecllist(:local => true).collect do |hash|
       new(hash)
     end
   end
 
   def peclname
-    name.sub('pecl-', '').downcase
+    self.name.sub('pecl-', '').downcase
   end
 
   def install(useversion = true)
-    command = ['upgrade']
+    command = ["upgrade"]
 
-    if @resource[:source]
-      command << @resource[:source]
-    elsif (!@resource.should(:ensure).is_a? Symbol) && useversion
-      command << '-f'
-      command << "#{peclname}-#{@resource.should(:ensure)}"
+    if source = @resource[:source]
+      command << source
     else
-      command << peclname
+      if (! @resource.should(:ensure).is_a? Symbol) and useversion
+        command << '-f'
+        command << "#{self.peclname}-#{@resource.should(:ensure)}"
+      else
+        command << self.peclname
+      end
     end
 
-    if @resource[:pipe]
-      command << '<<<'
-      command << @resource[:pipe]
+    if pipe = @resource[:pipe]
+        command << "<<<"
+        command << @resource[:pipe]
     end
 
     peclcmd(*command)
@@ -90,24 +107,29 @@ Puppet::Type.type(:package).provide :pecl, parent: Puppet::Provider::Package do
 
   def latest
     version = ''
-    command = [command(:peclcmd), 'remote-info', peclname]
-    execute(command).each_line do |set|
-      version = set.split[1] if set =~ %r{^Latest}
+    command = [command(:peclcmd), "remote-info", self.peclname]
+    list = execute(command).each_line do |set|
+      if set =~ /^Latest/
+        version = set.split[1]
+      end
     end
 
-    version
+    return version
   end
 
   def query
-    self.class.pecllist(justme: peclname)
+    self.class.pecllist(:justme => self.peclname)
   end
 
   def uninstall
-    output = peclcmd 'uninstall', peclname
-    raise Puppet::Error, output unless output =~ %r{^uninstall ok}
+    output = peclcmd "uninstall", self.peclname
+    if output =~ /^uninstall ok/
+    else
+      raise Puppet::Error, output
+    end
   end
 
   def update
-    install(false)
+    self.install(false)
   end
 end
