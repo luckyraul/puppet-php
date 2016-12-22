@@ -9,6 +9,10 @@ class php::ioncube (
     $install_prefix  = '/usr/local',
 ) inherits php::params {
 
+  Exec {
+    path => ['/bin', '/usr/bin','/usr/sbin']
+  }
+
   if $ensure == 'present' {
 
     exec { 'retrieve_ioncubeloader':
