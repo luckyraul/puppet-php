@@ -20,12 +20,8 @@ class php::newrelic (
     ensure  => $ensure,
   }
 
-  if ! $license {
-    fail('You must specify a valid License Key.')
-  }
-
   exec { 'newrelic_install':
-    command  => "/usr/bin/newrelic-install purge ; NR_INSTALL_SILENT=yes, NR_INSTALL_KEY=${license} /usr/bin/newrelic-install install",
+    command  => '/usr/bin/newrelic-install purge ; NR_INSTALL_SILENT=yes /usr/bin/newrelic-install install',
     provider => 'shell',
     user     => 'root',
     group    => 'root',

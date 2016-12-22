@@ -21,6 +21,18 @@ class php::params {
         'opcache.enable_cli' => '1',
       },
     }
+
+    if $::hardwaremodel == 'x86_64' {
+        $package_suffix = '-64'
+    } else {
+        $package_suffix = ''
+    }
+
+    $ioncube_server = 'http://downloads3.ioncube.com/loader_downloads/'
+    # http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86.tar.gz
+    $ioncube_loader_base = 'ioncube_loader_lin'
+    $ioncube_archive = "ioncube_loaders_lin_x86${package_suffix}.tar.gz"
+
     case $::operatingsystem {
         'Debian': {
           $config_root = '/etc/php5'

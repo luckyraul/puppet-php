@@ -1,6 +1,51 @@
 # Class php::ioncube
 class php::ioncube (
-    $ensure  = $php::ioncube,
+    $ensure          = $php::ioncube,
+    $php_version     = $php::version,
+    $ioncube_server  = $php::params::ioncube_server,
+    $ioncube_archive = $php::params::ioncube_archive,
+    $ioncube_base    = $php::params::ioncube_loader_base,
+    $ioncube_ts      = false,
+    $install_prefix  = '/usr/local',
 ) inherits php::params {
 
+  if $ensure {
+
+    exec { 'retrieve_ioncubeloader':
+      cwd     => '/tmp',
+      command => "wget ${$ioncube_server}${ioncube_archive} && tar xzf ${ioncube_archive} && mv ioncube/ ${install_prefix} && touch ${install_prefix}/ioncube/.installed",
+      creates => "${install_prefix}/ioncube/.installed"
+    }
+
+    if $ioncube_ts {
+      $ioncube_loader = "${ioncube_base}_${php_version}_ts.so"
+    } else {
+      $ioncube_loader = "${ioncube_base}_${php_version}.so"
+    }
+
+    file { "${php::params::config_root}/mods-available/ioncube.ini":
+      ensure  => $ensure,
+      content => ";Managed by puppet\n; priority=01;\n zend_extension=${install_prefix}/ioncube/${ioncube_loader}\n"
+    }
+
+    exec { 'enabling_ioncube':
+      cwd         => '/tmp',
+      command     => 'php5enmod ioncube',
+      refreshonly => true,
+    }
+
+  } else {
+
+    file { "${install_prefix}/ioncube":
+      ensure  => $ensure,
+      backup  => false,
+      recurse => true,
+      force   => true,
+    }
+
+    file { "/tmp/${ioncube_archive}":
+      ensure => $ensure,
+      backup => false,
+    }
+  }
 }
