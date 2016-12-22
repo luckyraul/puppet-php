@@ -40,7 +40,7 @@ class php::ioncube (
 
     Exec['retrieve_ioncubeloader']
       -> File["${php::params::config_root}/mods-available/ioncube.ini"]
-      -> Exec['enabling_ioncube']
+      ~> Exec['enabling_ioncube']
 
   } else {
 
