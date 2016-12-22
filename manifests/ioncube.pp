@@ -29,7 +29,7 @@ class php::ioncube (
 
     file { "${php::params::config_root}/mods-available/ioncube.ini":
       ensure  => $ensure,
-      content => ";Managed by puppet\n; priority=01;\n zend_extension=${install_prefix}/ioncube/${ioncube_loader}\n"
+      content => ";Managed by puppet\n; priority=01\nzend_extension=${install_prefix}/ioncube/${ioncube_loader}\n"
     }
 
     exec { 'enabling_ioncube':
