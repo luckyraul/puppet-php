@@ -40,6 +40,8 @@ class php (
     $composer             = true,
     $phpunit              = false,
     $newrelic             = false,
+    $newrelic_licence     = undef,
+    $ioncube              = false,
     $settings             = {},
     $extensions           = {},
     ) inherits php::params {
@@ -51,6 +53,9 @@ class php (
     validate_bool($phpunit)
     validate_hash($settings)
 
+    Exec {
+      path => ['/bin', '/usr/bin','/usr/sbin']
+    }
 
     if $manage_repos {
         class { 'php::repo': } -> Anchor['php::begin']
@@ -80,6 +85,10 @@ class php (
 
     if $newrelic {
         Class['php::packages'] -> class { 'php::newrelic':} -> Anchor['php::end']
+    }
+
+    if $ioncube {
+        Class['php::packages'] -> class { 'php::ioncube':} -> Anchor['php::end']
     }
 
     if $composer {

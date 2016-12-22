@@ -1,6 +1,7 @@
 # Class php::newrelic
 class php::newrelic (
     $ensure  = $php::newrelic,
+    $license = $php::newrelic_licence
 ) inherits php::params {
 
   apt::source { 'newrelic':
@@ -19,5 +20,17 @@ class php::newrelic (
     ensure  => $ensure,
   }
 
-  Exec['apt_update'] -> Package['newrelic-php5']
+  if ! $license {
+    fail('You must specify a valid License Key.')
+  }
+
+  exec { 'newrelic_install':
+    command  => "/usr/bin/newrelic-install purge ; NR_INSTALL_SILENT=yes, NR_INSTALL_KEY=${license} /usr/bin/newrelic-install install",
+    provider => 'shell',
+    user     => 'root',
+    group    => 'root',
+    creates  => "${php::params::config_root}/mods-available/newrelic.ini"
+  }
+
+  Exec['apt_update'] -> Package['newrelic-php5'] -> Exec['newrelic_install']
 }
