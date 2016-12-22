@@ -1,6 +1,6 @@
 # Class php::ioncube
 class php::ioncube (
-    $ensure          = $php::ioncube,
+    $ensure          = 'present',
     $php_version     = $php::version,
     $ioncube_server  = $php::params::ioncube_server,
     $ioncube_archive = $php::params::ioncube_archive,
@@ -9,7 +9,7 @@ class php::ioncube (
     $install_prefix  = '/usr/local',
 ) inherits php::params {
 
-  if $ensure {
+  if $ensure == 'present' {
 
     exec { 'retrieve_ioncubeloader':
       cwd     => '/tmp',
