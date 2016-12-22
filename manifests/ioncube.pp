@@ -34,6 +34,8 @@ class php::ioncube (
       refreshonly => true,
     }
 
+    File["${php::params::config_root}/mods-available/ioncube.ini"] -> Exec['enabling_ioncube']
+
   } else {
 
     file { "${install_prefix}/ioncube":
