@@ -53,15 +53,12 @@ class php (
     validate_bool($phpunit)
     validate_hash($settings)
 
-    Exec {
-      path => ['/bin', '/usr/bin','/usr/sbin']
-    }
-
     if $manage_repos {
         class { 'php::repo': } -> Anchor['php::begin']
     }
 
     anchor { 'php::begin': }
+      -> Exec { path => ['/bin', '/usr/bin','/usr/sbin'] }
       -> class { 'php::packages': }
       -> class { 'php::config': }
       -> anchor { 'php::end': }
