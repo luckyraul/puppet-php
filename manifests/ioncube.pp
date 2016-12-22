@@ -13,7 +13,7 @@ class php::ioncube (
 
     exec { 'retrieve_ioncubeloader':
       cwd     => '/tmp',
-      command => "wget ${$ioncube_server}${ioncube_archive} && tar xzf ${ioncube_archive} && mv ioncube/ ${install_prefix} && touch ${install_prefix}/ioncube/.installed",
+      command => "/usr/bin/wget ${$ioncube_server}${ioncube_archive} && /bin/tar xzf ${ioncube_archive} && /bin/mv ioncube/ ${install_prefix} && /usr/bin/touch ${install_prefix}/ioncube/.installed",
       creates => "${install_prefix}/ioncube/.installed"
     }
 
