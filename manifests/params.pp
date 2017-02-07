@@ -1,5 +1,19 @@
 # == Class: php::params
-class php::params {
+class php::params(
+    $php_version = undef,
+  ) {
+
+    if $php_version != undef {
+      validate_re($php_version, '^[57].[0-9]')
+    }
+
+    $default_php_version = $::operatingsystemrelease ? {
+          9 => '7.0',
+          default => '5.x',
+    }
+
+    $global_php_version = pick($php_version, $default_php_version)
+
     $ensure = present
     $composer_source  = 'https://getcomposer.org/composer.phar'
     $composer_path    = '/usr/local/bin/composer'
@@ -35,46 +49,65 @@ class php::params {
 
     case $::operatingsystem {
         'Debian': {
-          $config_root = '/etc/php5'
+          case $global_php_version {
+            /^7/: {
+              $config_root          = "/etc/php/${global_php_version}"
+              $fpm_service_name     = "php${global_php_version}-fpm"
+              $ext_tool_enable      = "/usr/sbin/phpenmod -v ${global_php_version}"
+              $ext_tool_query       = "/usr/sbin/phpquery -v ${global_php_version}"
+              $package_prefix       = 'php7.0-'
+              $fpm_default_params   = {
+                  'user'                 => 'www-data',
+                  'group'                => 'www-data',
+                  'listen'               => '/run/php/php7.0-fpm.sock',
+                  'listen.owner'         => 'www-data',
+                  'listen.group'         => 'www-data',
+                  'pm'                   => dynamic,
+                  'pm.max_children'      => 5,
+                  'pm.start_servers'     => 2,
+                  'pm.min_spare_servers' => 1,
+                  'pm.max_spare_servers' => 3,
+              }
+            }
+            default: {
+              $config_root          = '/etc/php5'
+              $fpm_service_name     = 'php5-fpm'
+              $ext_tool_enable      = '/usr/sbin/php5enmod'
+              $ext_tool_query       = '/usr/sbin/php5query'
+              $package_prefix       = 'php5-'
+              $fpm_default_params   = {
+                  'user'                 => 'www-data',
+                  'group'                => 'www-data',
+                  'listen'               => '/var/run/php5-fpm.sock',
+                  'listen.owner'         => 'www-data',
+                  'listen.group'         => 'www-data',
+                  'pm'                   => dynamic,
+                  'pm.max_children'      => 5,
+                  'pm.start_servers'     => 2,
+                  'pm.min_spare_servers' => 1,
+                  'pm.max_spare_servers' => 3,
+                  'chdir'                => '/'
+              }
+            }
+          }
           $common_package = ['cli','common']
           $dev_package = 'dev'
           $fpm_package = 'fpm'
           $fpm_pool_dir = "${config_root}/fpm/pool.d/"
           $fpm_config_file = "${config_root}/fpm/php-fpm.conf"
-          $fpm_service_name = 'php5-fpm'
-          $package_prefix = 'php5-'
-          $ext_tool_enable  = '/usr/sbin/php5enmod'
-          $ext_tool_query   = '/usr/sbin/php5query'
-          $fpm_default_params = {
-              'user'                 => 'www-data',
-              'group'                => 'www-data',
-              'listen'               => '/var/run/php5-fpm.sock',
-              'listen.owner'         => 'www-data',
-              'listen.group'         => 'www-data',
-              'pm'                   => dynamic,
-              'pm.max_children'      => 5,
-              'pm.start_servers'     => 2,
-              'pm.min_spare_servers' => 1,
-              'pm.max_spare_servers' => 3,
-              'chdir'                => '/'
+
+          $default_config = {
+            'PHP' => {
+              'short_open_tag' => 'On',
+              'always_populate_raw_post_data' => '-1',
+            },
+            'Date' => {
+              'date.timezone' => '"Europe/Moscow"',
+            }
           }
+
           case $::lsbdistcodename {
-              'wheezy': {
-                  $version = '5.5'
-                  $release = 'wheezy-php55'
-                  $manage_repos = true
-              }
               'jessie': {
-                  $version = '5.6'
-                  $default_config = {
-                    'PHP' => {
-                      'short_open_tag' => 'On',
-                      'always_populate_raw_post_data' => '-1',
-                    },
-                    'Date' => {
-                      'date.timezone' => '"Europe/Moscow"',
-                    }
-                  }
                   $release = $::lsbdistcodename
                   $manage_repos = false
               }
