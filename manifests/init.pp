@@ -27,7 +27,7 @@
 #   Install phpunit
 
 class php (
-    $version              = $php::params::version,
+    $version              = $php::params::global_php_version,
     $ensure               = $php::params::ensure,
     $manage_repos         = $php::params::manage_repos,
     $packages             = [],
