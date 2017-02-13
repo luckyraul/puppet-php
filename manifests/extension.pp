@@ -3,6 +3,7 @@ define php::extension (
   $ensure = 'installed',
   $provider = undef,
   $priority = 20,
+  $ext_tool_enable = $php::params::ext_tool_enable,
 ) {
   validate_string($ensure)
 
@@ -32,7 +33,7 @@ define php::extension (
 
   exec { "enabling_${name}":
     cwd         => '/tmp',
-    command     => "php5enmod ${name}",
+    command     => "${ext_tool_enable} ${name}",
     refreshonly => true,
   }
 
