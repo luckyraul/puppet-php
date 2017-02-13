@@ -14,7 +14,7 @@ class php::repo(
 
     include '::apt'
     create_resources(::apt::key, { 'php::repo' => {
-        key => $key['id'], key_source => $key['source'],
+        id => $key['id'], source => $key['source'],
     }})
 
     case $version {
