@@ -72,7 +72,7 @@ class php (
     })
 
     if $fpm {
-        Anchor['php::begin'] -> class { 'php::fpm':} -> Anchor['php::end']
+        Anchor['php::begin'] -> class { 'php::fpm':} -> Class['php::config']
     }
 
     if $pear {
