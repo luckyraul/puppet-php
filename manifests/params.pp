@@ -56,6 +56,8 @@ class php::params(
               $ext_tool_enable      = "/usr/sbin/phpenmod -v ${global_php_version}"
               $ext_tool_query       = "/usr/sbin/phpquery -v ${global_php_version}"
               $package_prefix       = 'php7.0-'
+              $fpm_pid_file         = '/run/php/php7.0-fpm.pid'
+              $fpm_error_log        = '/var/log/php7.0-fpm.log'
               $fpm_default_params   = {
                   'user'                 => 'www-data',
                   'group'                => 'www-data',
@@ -72,6 +74,8 @@ class php::params(
             default: {
               $config_root          = '/etc/php5'
               $fpm_service_name     = 'php5-fpm'
+              $fpm_pid_file         = '/run/php5-fpm.pid'
+              $fpm_error_log        = '/var/log/php5-fpm.log'
               $ext_tool_enable      = '/usr/sbin/php5enmod'
               $ext_tool_query       = '/usr/sbin/php5query'
               $package_prefix       = 'php5-'
