@@ -1,7 +1,7 @@
 # Class php::ioncube
 class php::ioncube (
     $ensure          = 'present',
-    $php_version     = $php::version,
+    $php_version     = $php::params::global_php_version,
     $ioncube_server  = $php::params::ioncube_server,
     $ioncube_archive = $php::params::ioncube_archive,
     $ioncube_base    = $php::params::ioncube_loader_base,
@@ -34,11 +34,11 @@ class php::ioncube (
 
     exec { 'enabling_ioncube':
       cwd         => '/tmp',
-      command     => 'php5enmod ioncube',
+      command     => "${php::params::ext_tool_enable} ioncube",
       refreshonly => true,
     }
 
-    Exec['retrieve_ioncubeloader']
+    ensure_packages(['wget'], {'ensure' => 'present'}) -> Exec['retrieve_ioncubeloader']
       -> File["${php::params::config_root}/mods-available/ioncube.ini"]
       ~> Exec['enabling_ioncube']
 
