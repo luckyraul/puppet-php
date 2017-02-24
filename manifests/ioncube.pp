@@ -38,7 +38,9 @@ class php::ioncube (
       refreshonly => true,
     }
 
-    ensure_packages(['wget'], {'ensure' => 'present'}) -> Exec['retrieve_ioncubeloader']
+    ensure_packages(['wget'], {'ensure' => 'present'})
+
+    Package['wget'] -> Exec['retrieve_ioncubeloader']
       -> File["${php::params::config_root}/mods-available/ioncube.ini"]
       ~> Exec['enabling_ioncube']
 
