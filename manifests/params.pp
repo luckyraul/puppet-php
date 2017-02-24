@@ -6,6 +6,7 @@ class php::params inherits php::globals {
     $composer_path    = '/usr/local/bin/composer'
     $phpunit_source   = 'https://phar.phpunit.de/phpunit.phar'
     $phpunit_path     = '/usr/local/bin/phpunit'
+
     $fpm_pools        = { 'www' => {} }
     $fpm_service_enable  = true
     $fpm_service_ensure  = 'running'
@@ -14,6 +15,8 @@ class php::params inherits php::globals {
             'daemonize' => 'yes',
         }
     }
+    $fpm_user  = 'www-data'
+    $fpm_group = 'www-data'
 
     $opc_config =  {
       '' => {
@@ -45,18 +48,18 @@ class php::params inherits php::globals {
               $package_prefix       = 'php7.0-'
               $fpm_pid_file         = '/run/php/php7.0-fpm.pid'
               $fpm_error_log        = '/var/log/php7.0-fpm.log'
-              $fpm_default_params   = {
-                  'user'                 => 'www-data',
-                  'group'                => 'www-data',
-                  'listen'               => '/run/php/php7.0-fpm.sock',
-                  'listen.owner'         => 'www-data',
-                  'listen.group'         => 'www-data',
-                  'pm'                   => dynamic,
-                  'pm.max_children'      => 5,
-                  'pm.start_servers'     => 2,
-                  'pm.min_spare_servers' => 1,
-                  'pm.max_spare_servers' => 3,
-              }
+              # $fpm_default_params   = {
+              #     'user'                 => 'www-data',
+              #     'group'                => 'www-data',
+              #     'listen'               => '/run/php/php7.0-fpm.sock',
+              #     'listen.owner'         => 'www-data',
+              #     'listen.group'         => 'www-data',
+              #     'pm'                   => dynamic,
+              #     'pm.max_children'      => 5,
+              #     'pm.start_servers'     => 2,
+              #     'pm.min_spare_servers' => 1,
+              #     'pm.max_spare_servers' => 3,
+              # }
             }
             default: {
               $config_root          = '/etc/php5'
@@ -66,19 +69,19 @@ class php::params inherits php::globals {
               $ext_tool_enable      = '/usr/sbin/php5enmod'
               $ext_tool_query       = '/usr/sbin/php5query'
               $package_prefix       = 'php5-'
-              $fpm_default_params   = {
-                  'user'                 => 'www-data',
-                  'group'                => 'www-data',
-                  'listen'               => '/var/run/php5-fpm.sock',
-                  'listen.owner'         => 'www-data',
-                  'listen.group'         => 'www-data',
-                  'pm'                   => dynamic,
-                  'pm.max_children'      => 5,
-                  'pm.start_servers'     => 2,
-                  'pm.min_spare_servers' => 1,
-                  'pm.max_spare_servers' => 3,
-                  'chdir'                => '/'
-              }
+              # $fpm_default_params   = {
+              #     'user'                 => 'www-data',
+              #     'group'                => 'www-data',
+              #     'listen'               => '/var/run/php5-fpm.sock',
+              #     'listen.owner'         => 'www-data',
+              #     'listen.group'         => 'www-data',
+              #     'pm'                   => dynamic,
+              #     'pm.max_children'      => 5,
+              #     'pm.start_servers'     => 2,
+              #     'pm.min_spare_servers' => 1,
+              #     'pm.max_spare_servers' => 3,
+              #     'chdir'                => '/'
+              # }
             }
           }
           $common_package = ['cli','common']
