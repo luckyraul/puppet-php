@@ -5,12 +5,6 @@ class php::repo(
 {
 
     validate_string($version)
-
-    include '::apt'
-    create_resources(::apt::key, { 'php::repo' => {
-        id => $key['id'], source => $key['source'],
-    }})
-
     case $version {
         '5.6': {
             case $::lsbdistcodename {
@@ -65,6 +59,11 @@ class php::repo(
             fail("Unsupported PHP release: ${version}")
         }
     }
+    include '::apt'
+
+    create_resources(::apt::key, { 'php::repo' => {
+        id => $key['id'], source => $key['source'],
+    }})
 
     ::apt::source { "source_php_${release}":
         location => $location,
