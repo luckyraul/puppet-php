@@ -13,6 +13,15 @@ class php::ioncube (
     path => ['/bin', '/usr/bin','/usr/sbin']
   }
 
+  case $php_version {
+    '5.6', '7.0': {
+
+    }
+    default: {
+        fail("Unsupported PHP release: ${::lsbdistcodename} - ${php_version}")
+    }
+  }
+
   if $ensure == 'present' {
 
     exec { 'retrieve_ioncubeloader':
