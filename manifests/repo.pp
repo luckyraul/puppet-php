@@ -26,12 +26,13 @@ class php::repo(
             case $::lsbdistcodename {
                 'jessie': {
                     $release = $php::params::release
-                    $repos    = 'all'
-                    $location = 'http://packages.dotdeb.org'
+                    $location = 'https://packages.sury.org/php/'
+                    $repos    = 'main'
                     $key      = {
-                        'id'     => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
-                        'source' => 'http://www.dotdeb.org/dotdeb.gpg',
+                        'id'     => 'DF3D585DB8F0EB658690A554AC0E47584A7A714D',
+                        'source' => 'https://packages.sury.org/php/apt.gpg',
                     }
+                    ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
                 }
                 default: {
                     fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
