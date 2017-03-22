@@ -42,6 +42,11 @@ define php::fpm::pool (
 ) {
     $file = "${php::params::fpm_pool_dir}${name}.conf"
 
+    $group_final = $group ? {
+        undef   => $user,
+        default => $group
+    }
+
     $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
 
     if ($ensure == 'absent') {
