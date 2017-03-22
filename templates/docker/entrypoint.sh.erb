@@ -3,5 +3,6 @@ set -e
 
 if [[ "x"$PHPFPM_USER != "x" ]]; then
   usermod -u $PHPFPM_USER www-data
+  groupmod -g $PHPFPM_USER www-data
 fi
 exec "$@"
