@@ -48,6 +48,8 @@ define php::fpm::pool (
         default => $group
     }
 
+    $pool = $title
+
     $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
 
     if ($ensure == 'absent') {
