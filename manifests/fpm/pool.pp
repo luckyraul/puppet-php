@@ -28,6 +28,7 @@ define php::fpm::pool (
     $rlimit_core               = undef,
     $chroot                    = undef,
     $chdir                     = undef,
+    $clear_env                 = 'yes',
     $catch_workers_output      = 'no',
     $include                   = undef,
     $env                       = [],
