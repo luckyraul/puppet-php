@@ -46,7 +46,7 @@ class php::params inherits php::globals {
               $ext_tool_enable      = "/usr/sbin/phpenmod -v ${global_php_version}"
               $ext_tool_query       = "/usr/sbin/phpquery -v ${global_php_version}"
               $package_prefix       = "php${global_php_version}-"
-              $fpm_pid_file         = "/run/php/php${global_php_version}-fpm.pid"
+              $fpm_pid_file         = "/run/php${global_php_version}-fpm.pid"
               $fpm_error_log        = "/var/log/php${global_php_version}-fpm.log"
               # $fpm_default_params   = {
               #     'user'                 => 'www-data',

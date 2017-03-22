@@ -42,6 +42,7 @@ class php (
     $newrelic             = false,
     $newrelic_licence     = undef,
     $ioncube              = false,
+    $docker               = false,
     $settings             = {},
     $extensions           = {},
     ) inherits php::params {
@@ -99,4 +100,12 @@ class php (
         Anchor['php::begin'] -> class { 'php::phpunit':} -> Anchor['php::end']
     }
 
+    if $docker {
+        file {'/entrypoint.sh':
+            owner   => root,
+            group   => root,
+            mode    => '0755',
+            content => template('php/docker/entrypoint.sh.erb'),
+        }
+    }
 }
