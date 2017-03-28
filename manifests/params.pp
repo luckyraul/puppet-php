@@ -16,16 +16,6 @@ class php::params inherits php::globals {
         }
     }
 
-    $newrelic_configfile = "/etc/php/${global_php_version}/mods-available/newrelic.ini"
-    $newrelic_settings = {
-      'newrelic' => {
-        'newrelic.enabled' => true,
-        'newrelic.license' => '${NR_INSTALL_KEY}',
-        'newrelic.appname' => '${NR_INSTALL_APP}',
-      }
-    }
-
-
     $fpm_user  = 'www-data'
     $fpm_group = 'www-data'
 
@@ -124,5 +114,14 @@ class php::params inherits php::globals {
         default: {
             fail("Unsupported os: ${::operatingsystem}")
         }
+    }
+
+    $newrelic_configfile = "${config_root}/mods-available/newrelic.ini"
+    $newrelic_settings = {
+      'newrelic' => {
+        'newrelic.enabled' => true,
+        'newrelic.license' => '${NR_INSTALL_KEY}',
+        'newrelic.appname' => '${NR_INSTALL_APP}',
+      }
     }
 }
