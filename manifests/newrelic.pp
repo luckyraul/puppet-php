@@ -1,23 +1,11 @@
 # Class php::newrelic
 class php::newrelic (
-    $ensure  = $php::newrelic,
-    $license = $php::newrelic_licence,
+    $ensure       = $php::newrelic,
     $package_name = 'newrelic-php5',
+    $settings     = $php::newrelic_settings,
+    $configile    = $php::newrelic_configfile,
 ) inherits php::params {
 
-  apt::source { 'newrelic':
-    location => 'http://apt.newrelic.com/debian/',
-    repos    => 'non-free',
-    key      => {
-      id  => 'B60A3EC9BC013B9C23790EC8B31B29E5548C16BF',
-      key => 'https://download.newrelic.com/548C16BF.gpg',
-    },
-    include  => {
-      src => false,
-    },
-    release  => 'newrelic',
-    notify => Exec['apt_update']
-  } ->
   package { $package_name:
     ensure  => $ensure,
   }
@@ -30,7 +18,7 @@ class php::newrelic (
     creates  => "${php::params::config_root}/mods-available/newrelic.ini"
   }
 
-  create_ini_settings($php::newrelic_settings, {'path' => $php::newrelic_configfile, require => Exec['newrelic_install']})
+  create_ini_settings($settings, {'path' => $configile, require => Exec['newrelic_install']})
 
   Package[$package_name] -> Exec['newrelic_install']
 }

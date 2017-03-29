@@ -59,14 +59,15 @@ class php (
       path => ['/bin', '/usr/bin','/usr/sbin']
     }
 
-    if $manage_repos {
-        class { 'php::repo': } -> Exec['apt_update'] -> Anchor['php::begin']
-    }
-
     anchor { 'php::begin': }
+      -> class { 'php::repo': }
       -> class { 'php::packages': }
       -> class { 'php::config': }
       -> anchor { 'php::end': }
+
+    if $manage_repos or $newrelic {
+      Class['php::repo'] -> Exec['apt_update']
+    }
 
     create_resources('php::extension', $extensions, {
       require => Class['php::config'],
@@ -74,15 +75,15 @@ class php (
     })
 
     if $fpm {
-        Anchor['php::begin'] -> class { 'php::fpm':} -> Class['php::config']
+        Class['php::packages'] -> class { 'php::fpm':} -> Class['php::config']
     }
 
     if $pear {
-        Anchor['php::begin'] -> class { 'php::pear':} -> Anchor['php::end']
+        Class['php::packages'] -> class { 'php::pear':} -> Anchor['php::end']
     }
 
     if $dev {
-        Anchor['php::begin'] -> class { 'php::dev':} -> Anchor['php::end']
+        Class['php::packages'] -> class { 'php::dev':} -> Anchor['php::end']
     }
 
     if $newrelic {
@@ -94,11 +95,11 @@ class php (
     }
 
     if $composer {
-        Anchor['php::begin'] -> class { 'php::composer':} -> Anchor['php::end']
+        Class['php::packages'] -> class { 'php::composer':} -> Anchor['php::end']
     }
 
     if $phpunit {
-        Anchor['php::begin'] -> class { 'php::phpunit':} -> Anchor['php::end']
+        Class['php::packages'] -> class { 'php::phpunit':} -> Anchor['php::end']
     }
 
     if $docker {
