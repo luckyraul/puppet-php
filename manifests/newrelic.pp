@@ -1,7 +1,8 @@
 # Class php::newrelic
 class php::newrelic (
     $ensure  = $php::newrelic,
-    $license = $php::newrelic_licence
+    $license = $php::newrelic_licence,
+    $package_name = 'newrelic-php5',
 ) inherits php::params {
 
   apt::source { 'newrelic':
@@ -15,8 +16,9 @@ class php::newrelic (
       src => false,
     },
     release  => 'newrelic',
+    notify => Exec['apt_update']
   } ->
-  package { 'newrelic-php5':
+  package { $package_name:
     ensure  => $ensure,
   }
 
@@ -30,5 +32,5 @@ class php::newrelic (
 
   create_ini_settings($php::newrelic_settings, {'path' => $php::newrelic_configfile, require => Exec['newrelic_install']})
 
-  Exec['apt_update'] -> Package['newrelic-php5'] -> Exec['newrelic_install']
+  Package[$package_name] -> Exec['newrelic_install']
 }
