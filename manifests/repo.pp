@@ -73,6 +73,5 @@ class php::repo(
            'src' => false
         },
         require  => Apt::Key['php::repo'],
-        notify   => Exec['apt_update']
     }
 }
