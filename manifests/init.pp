@@ -60,7 +60,7 @@ class php (
     }
 
     if $manage_repos {
-        class { 'php::repo': } -> Anchor['php::begin']
+        class { 'php::repo': } -> Exec['apt_update'] -> Anchor['php::begin']
     }
 
     anchor { 'php::begin': }
