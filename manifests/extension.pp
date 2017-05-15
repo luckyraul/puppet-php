@@ -13,6 +13,7 @@ define php::extension (
 
   if $provider == 'pecl' {
       $real_package = "pecl-${name}"
+      ensure_packages(['build-essential'], {'ensure' => 'present'})
   } else {
       $real_package = $name
   }
