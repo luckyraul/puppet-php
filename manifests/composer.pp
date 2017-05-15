@@ -6,13 +6,10 @@ class php::composer (
 
   ensure_packages(['curl'], {'ensure' => 'present'})
 
-  include ::staging
-
-  Package['curl'] -> staging::file { 'composer.phar':
-    source => $composer_source,
-  } -> file { $composer_path:
+  Package['curl'] -> archive { $composer_path:
       ensure  => 'present',
-      mode    => '0550',
-      source  => "${::staging::path}/php/composer.phar",
+      source  => $composer_source,
+  } -> file {$composer_path:
+      mode  => '0755',
   }
 }
