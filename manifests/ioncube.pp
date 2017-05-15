@@ -1,7 +1,7 @@
 # Class php::ioncube
 class php::ioncube (
     $ensure          = 'present',
-    $php_version     = $php::params::global_php_version,
+    $php_version     = $php::version,
     $ioncube_server  = $php::params::ioncube_server,
     $ioncube_archive = $php::params::ioncube_archive,
     $ioncube_base    = $php::params::ioncube_loader_base,
