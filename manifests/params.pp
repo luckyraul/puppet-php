@@ -10,11 +10,6 @@ class php::params inherits php::globals {
     $fpm_pools        = { 'www' => {} }
     $fpm_service_enable  = true
     $fpm_service_ensure  = 'running'
-    $fpm_service_settings = {
-        'global' => {
-            'daemonize' => 'yes',
-        }
-    }
 
     $fpm_user  = 'www-data'
     $fpm_group = 'www-data'
@@ -89,7 +84,23 @@ class php::params inherits php::globals {
           $dev_package = 'dev'
           $fpm_package = 'fpm'
           $fpm_pool_dir = "${config_root}/fpm/pool.d/"
-          $fpm_config_file = "${config_root}/fpm/php-fpm.conf"
+
+          $fpm_service_settings = {
+              daemonize                   => 'yes',
+              file                        => "${config_root}/fpm/php-fpm.conf",
+              pid_file                    => $fpm_pid_file,
+              error_log                   => $fpm_error_log,
+              syslog_facility             => 'daemon',
+              syslog_ident                => 'php-fpm',
+              log_level                   => 'notice',
+              emergency_restart_threshold => '0',
+              emergency_restart_interval  => '0',
+              process_control_timeout     => '0',
+              process_max                 => '0',
+              rlimit_files                => nil,
+              systemd_interval            => nil,
+              pool_base_dir               => $fpm_pool_dir,
+          }
 
           $default_config = {
             'PHP' => {
