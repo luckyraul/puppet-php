@@ -1,6 +1,6 @@
 # Class php::newrelic
 class php::newrelic (
-    $ensure       = $php::newrelic,
+    $ensure       = 'present',
     $package_name = 'newrelic-php5',
     $settings     = $php::newrelic_settings,
     $configile    = $php::newrelic_configfile,
