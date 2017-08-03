@@ -2,6 +2,7 @@
 define php::extension (
   $ensure = 'installed',
   $provider = undef,
+  $prefix = undef,
   $priority = 20,
   $ext_tool_enable = $php::params::ext_tool_enable,
 ) {
@@ -12,10 +13,10 @@ define php::extension (
   }
 
   if $provider == 'pecl' {
-      $real_package = "pecl-${name}"
+      $real_package = prefix($name, "${provider}-")
       ensure_packages(['build-essential'], {'ensure' => 'present'})
   } else {
-      $real_package = $name
+      $real_package = prefix($name, $prefix)
   }
 
   if $provider {
