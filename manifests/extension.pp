@@ -13,10 +13,10 @@ define php::extension (
   }
 
   if $provider == 'pecl' {
-      $real_package = prefix($name, "${provider}-")
+      $real_package = prefix([$name], "${provider}-")
       ensure_packages(['build-essential'], {'ensure' => 'present'})
   } else {
-      $real_package = prefix($name, $prefix)
+      $real_package = prefix([$name], $prefix)
   }
 
   if $provider {
