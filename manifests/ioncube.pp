@@ -14,7 +14,7 @@ class php::ioncube (
   }
 
   case $php_version {
-    '5.6', '7.0': {
+    '5.6', '7.0', '7.1': {
 
     }
     default: {
