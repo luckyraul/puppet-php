@@ -19,7 +19,13 @@ define php::extension (
       $real_package = prefix([$name], $prefix)
   }
 
-  $deps = $provider ? [Class['php::pear'], Class['php::dev']] : Class['php::packages']
+  if $provider {
+    $deps = [Class['php::pear'], Class['php::dev']]
+  }
+  else {
+    $deps = Class['php::packages']
+  }
+
 
   package { $real_package:
     ensure   => $ensure,
