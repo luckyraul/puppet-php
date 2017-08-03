@@ -19,19 +19,12 @@ define php::extension (
       $real_package = prefix([$name], $prefix)
   }
 
-  if $provider {
-    $require = [
-        Class['php::pear'],
-        Class['php::dev']
-    ]
-  } else {
-    $require = Class['php::packages']
-  }
+  $deps = $provider ? [Class['php::pear'], Class['php::dev']] : Class['php::packages']
 
   package { $real_package:
     ensure   => $ensure,
     provider => $provider,
-    require  => $require,
+    require  => $deps,
   }
 
   if $provider {
