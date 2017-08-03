@@ -18,25 +18,33 @@ define php::extension (
       $real_package = $name
   }
 
+  if $provider {
+    $require = [
+        Class['php::pear'],
+        Class['php::dev']
+    ]
+  } else {
+    $require = Class['php::packages']
+  }
+
   package { $real_package:
     ensure   => $ensure,
     provider => $provider,
-    require  => [
-        Class['php::pear'],
-        Class['php::dev'],
-    ],
+    require  => $require,
   }
 
-  file {"${php::params::config_root}/mods-available/${name}.ini":
-    content => "; Managed by puppet\n; priority=${priority}\nextension=${name}.so\n",
-    notify  => Exec["enabling_${name}"],
-  }
+  if $provider {
+    file {"${php::params::config_root}/mods-available/${name}.ini":
+      content => "; Managed by puppet\n; priority=${priority}\nextension=${name}.so\n",
+      notify  => Exec["enabling_${name}"],
+    }
 
-  exec { "enabling_${name}":
-    cwd         => '/tmp',
-    command     => "${ext_tool_enable} ${name}",
-    refreshonly => true,
-  }
+    exec { "enabling_${name}":
+      cwd         => '/tmp',
+      command     => "${ext_tool_enable} ${name}",
+      refreshonly => true,
+    }
 
-  Package[$real_package] -> File["${php::params::config_root}/mods-available/${name}.ini"] -> Exec["enabling_${name}"]
+    Package[$real_package] -> File["${php::params::config_root}/mods-available/${name}.ini"] -> Exec["enabling_${name}"]
+  }
 }
