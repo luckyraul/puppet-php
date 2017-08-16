@@ -40,6 +40,9 @@ class php::repo(
                           'source' => 'http://www.dotdeb.org/dotdeb.gpg',
                       }
                   }
+                  'stretch': {
+
+                  }
                   default: {
                       fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
                   }
@@ -47,7 +50,7 @@ class php::repo(
           }
           '7.1': {
               case $::lsbdistcodename {
-                  'jessie': {
+                  'jessie', 'stretch': {
                       $release = $php::params::release
                       $location = 'https://packages.sury.org/php/'
                       $repos    = 'main'
@@ -76,7 +79,7 @@ class php::repo(
           release  => $release,
           repos    => $repos,
           include  => {
-             'src' => false
+            'src' => false
           },
           require  => Apt::Key['php::repo'],
       }
