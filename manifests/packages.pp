@@ -9,10 +9,12 @@ class php::packages (
     validate_array($common_names)
     validate_array($packages_names)
 
-    $merge_names = union($packages_names, $common_names)
-    $package_list = prefix($merge_names, $php::params::package_prefix)
+    $common_list = prefix($common_names, $php::params::package_prefix)
+    $package_list = prefix($packages_names, $php::params::package_prefix)
 
-    package { $package_list:
+    package { $common_list:
+        ensure => $ensure,
+    } -> package { $package_list:
         ensure => $ensure,
     }
 }
