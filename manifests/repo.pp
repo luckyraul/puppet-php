@@ -65,6 +65,23 @@ class php::repo(
                   }
               }
           }
+          '7.2': {
+              case $::lsbdistcodename {
+                  'jessie', 'stretch': {
+                      $release = $php::params::release
+                      $location = 'https://packages.sury.org/php/'
+                      $repos    = 'main'
+                      $key      = {
+                          'id'     => 'DF3D585DB8F0EB658690A554AC0E47584A7A714D',
+                          'source' => 'https://packages.sury.org/php/apt.gpg',
+                      }
+                      ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
+                  }
+                  default: {
+                      fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                  }
+              }
+          }
           default: {
               fail("Unsupported PHP release: ${version}")
           }
