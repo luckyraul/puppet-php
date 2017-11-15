@@ -66,7 +66,7 @@ class php (
       -> anchor { 'php::end': }
 
     if $manage_repos or $newrelic {
-      Class['php::repo'] -> Exec['apt_update']
+      Class['php::repo'] -> Exec['apt_update'] -> Class['php::packages']
     }
 
     create_resources('php::extension', $extensions, {
