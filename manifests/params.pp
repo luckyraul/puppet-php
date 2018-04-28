@@ -34,7 +34,7 @@ class php::params inherits php::globals {
     $ioncube_archive = "ioncube_loaders_lin_x86${package_suffix}.tar.gz"
 
     case $::operatingsystem {
-        'Debian': {
+        'Debian', 'Ubuntu': {
           case $global_php_version {
             /^7/: {
               $config_root          = "/etc/php/${global_php_version}"
@@ -115,6 +115,9 @@ class php::params inherits php::globals {
           case $::lsbdistcodename {
               'jessie', 'stretch': {
                   $release = $::lsbdistcodename
+                  $manage_repos = false
+              }
+              'xenial': {
                   $manage_repos = false
               }
               default: {
