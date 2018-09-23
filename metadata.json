@@ -1,6 +1,6 @@
 {
   "name": "luckyraul-php",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "author": "Nikita Tarasov",
   "summary": "Module for installing and managing php",
   "license": "Apache-2.0",

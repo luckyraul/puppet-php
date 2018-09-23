@@ -8,6 +8,7 @@ class php::globals (
 
   $default_php_version = $::facts['os']['release']['major'] ? {
     '9' => '7.0',
+    '10' => '7.2',
     default => '5.x',
   }
 

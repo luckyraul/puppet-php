@@ -15,7 +15,7 @@ class php::repo::ubuntu(
       case $version {
           '7.0': {
           }
-          '7.1', '7.2': {
+          '7.1', '7.2', '7.3': {
               case $::lsbdistcodename {
                   'xenial': {
                       ::apt::ppa { 'ppa:ondrej/php': }
