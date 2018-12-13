@@ -11,7 +11,9 @@ class php::packages (
 
     $common_list = prefix($common_names, $php::params::package_prefix)
     $package_list = prefix($packages_names, $php::params::package_prefix)
-
+    
+    ensure_packages(['unzip'], {'ensure' => 'present'})
+    
     package { $common_list:
         ensure => $ensure,
     } -> package { $package_list:
