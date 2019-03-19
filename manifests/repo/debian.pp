@@ -55,7 +55,7 @@ class php::repo::debian(
                       $location = 'https://packages.sury.org/php/'
                       $repos    = 'main'
                       $key      = {
-                          'id'     => 'DF3D585DB8F0EB658690A554AC0E47584A7A714D',
+                          'id'     => '15058500A0235D97F5D10063B188E2B695BD4743',
                           'source' => 'https://packages.sury.org/php/apt.gpg',
                       }
                       ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
