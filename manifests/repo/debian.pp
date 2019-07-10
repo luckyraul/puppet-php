@@ -50,7 +50,7 @@ class php::repo::debian(
           }
           '7.1', '7.2', '7.3': {
               case $::lsbdistcodename {
-                  'jessie', 'stretch': {
+                  'jessie', 'stretch', 'buster': {
                       $release = $php::params::release
                       $location = 'https://packages.sury.org/php/'
                       $repos    = 'main'

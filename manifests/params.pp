@@ -113,7 +113,7 @@ class php::params inherits php::globals {
           }
 
           case $::lsbdistcodename {
-              'jessie', 'stretch': {
+              'jessie', 'stretch', 'buster': {
                   $release = $::lsbdistcodename
                   $manage_repos = false
               }
