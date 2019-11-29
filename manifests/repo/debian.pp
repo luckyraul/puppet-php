@@ -48,7 +48,7 @@ class php::repo::debian(
                   }
               }
           }
-          '7.1', '7.2', '7.3': {
+          '7.1', '7.2', '7.3', '7.4': {
               case $::lsbdistcodename {
                   'jessie', 'stretch', 'buster': {
                       $release = $php::params::release
