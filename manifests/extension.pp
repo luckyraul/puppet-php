@@ -4,9 +4,9 @@ define php::extension (
   $provider = undef,
   $prefix = undef,
   $priority = 20,
+  Hash $settings = {},
   $ext_tool_enable = $php::params::ext_tool_enable,
 ) {
-  validate_string($ensure)
 
   Exec {
     path => ['/bin', '/usr/bin','/usr/sbin']
@@ -25,7 +25,6 @@ define php::extension (
   else {
     $deps = Class['php::packages']
   }
-
 
   package { $real_package:
     ensure   => $ensure,
@@ -47,4 +46,10 @@ define php::extension (
 
     Package[$real_package] -> File["${php::params::config_root}/mods-available/${name}.ini"] -> Exec["enabling_${name}"]
   }
+
+  $defaults = {
+    path    => "${php::params::config_root}/mods-available/${name}.ini",
+    require => Package[$real_package],
+  }
+  create_ini_settings({ '' => $settings }, $defaults)
 }
