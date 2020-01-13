@@ -31,7 +31,7 @@ define php::fpm::pool (
     $chdir                     = undef,
     $clear_env                 = 'yes',
     $catch_workers_output      = 'no',
-    $include                   = undef,
+    $decorate_workers_output   = undef,
     $env                       = [],
     $env_value                 = {},
     $options                   = {},
@@ -41,6 +41,7 @@ define php::fpm::pool (
     $php_admin_flag            = {},
     $php_directives            = [],
     $base_dir                  = undef,
+    $version                   = $php::version,
 ) {
     $file = "${php::params::fpm_pool_dir}${name}.conf"
 
