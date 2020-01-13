@@ -48,7 +48,11 @@ log_level = <%= @config['log_level'] %>
 ; logging to a file descriptor. It means the new line character is not present
 ; when logging to syslog.
 ; Default Value: 1024
+<% if @config['log_limit'] != 'nil' -%>
+log_limit = <%= @config['log_limit'] %>
+<% else -%>
 ;log_limit = 4096
+<% end -%>
 
 ; Log buffering specifies if the log line is buffered which means that the
 ; line is written in a single write operation. If the value is false, then the
