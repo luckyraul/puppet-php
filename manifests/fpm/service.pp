@@ -14,6 +14,12 @@ class php::fpm::service(
         content => template('php/fpm/php-fpm.conf.erb'),
     }
 
+    file { '/run/php':
+      ensure => directory,
+      owner   => root,
+      group   => root,
+    }
+
     service { $php::params::fpm_service_name:
         ensure     => $php::fpm_service_ensure,
         enable     => $php::fpm_service_enable,
