@@ -152,4 +152,4 @@ systemd_interval = <%= @config['systemd_interval'] %>
 ; Relative path can also be used. They will be prefixed by:
 ;  - the global prefix if it's been set (-p argument)
 ;  - /usr otherwise
-include=<%= @config['pool_base_dir'] %>/*.conf
+include=<%= @config['pool_base_dir'] %>*.conf
