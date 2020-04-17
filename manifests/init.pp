@@ -103,6 +103,8 @@ class php (
     }
 
     if $docker {
+        ensure_packages(['git', 'openssh-client'], {'ensure' => 'present'})
+
         file {'/entrypoint.sh':
             owner   => root,
             group   => root,
