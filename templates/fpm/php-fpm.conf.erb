@@ -14,7 +14,11 @@
 ; Pid file
 ; Note: the default prefix is /var
 ; Default Value: none
+<% if @config['pid_file'] != 'nil' -%>
 pid = <%= @config['pid_file'] %>
+<% else -%>
+;pid = run/php-fpm.pid
+<% end -%>
 
 ; Error log file
 ; If it's set to "syslog", log is sent to syslogd instead of being written
