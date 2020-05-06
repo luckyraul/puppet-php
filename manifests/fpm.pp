@@ -7,8 +7,8 @@ class php::fpm (
 
     $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
 
-    validate_string($ensure)
-    validate_hash($pools)
+    # validate_string($ensure)
+    # validate_hash($pools)
 
     anchor { 'php::fpm::begin': } ->
     package { $real_package:

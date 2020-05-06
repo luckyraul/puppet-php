@@ -6,7 +6,7 @@ class php::repo::ubuntu(
     )
 {
 
-    validate_string($version)
+    # validate_string($version)
 
     include '::apt'
 

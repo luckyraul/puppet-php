@@ -2,9 +2,9 @@
 class php::globals (
   $php_version = undef
 ) {
-  if $php_version != undef {
-    validate_re($php_version, '^[57].[0-9]')
-  }
+  # if $php_version != undef {
+    # validate_re($php_version, '^[57].[0-9]')
+  # }
 
   $default_php_version = $::facts['os']['release']['major'] ? {
     '9' => '7.0',

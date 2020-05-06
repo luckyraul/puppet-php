@@ -48,12 +48,12 @@ class php (
     $extensions           = {},
     ) inherits php::params {
 
-    validate_string($ensure)
-    validate_bool($fpm)
-    validate_bool($dev)
-    validate_bool($composer)
-    validate_bool($phpunit)
-    validate_hash($settings)
+    # validate_string($ensure)
+    # validate_bool($fpm)
+    # validate_bool($dev)
+    # validate_bool($composer)
+    # validate_bool($phpunit)
+    # validate_hash($settings)
 
     Exec {
       path => ['/bin', '/usr/bin','/usr/sbin']

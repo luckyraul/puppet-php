@@ -6,7 +6,7 @@ class php::repo::debian(
     )
 {
 
-    validate_string($version)
+    # validate_string($version)
 
     include '::apt'
 
