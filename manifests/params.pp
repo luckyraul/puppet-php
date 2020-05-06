@@ -105,9 +105,7 @@ class php::params inherits php::globals {
 
           $default_config = {
             'PHP' => {
-              'expose_php' => 'Off',
-              'short_open_tag' => 'On',
-              'always_populate_raw_post_data' => '-1',
+              'expose_php' => 'Off'
             },
             'Date' => {
               'date.timezone' => '"Europe/Moscow"',
