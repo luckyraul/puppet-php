@@ -17,7 +17,7 @@ class php::params inherits php::globals {
 
     $opc_config =  {
       '' => {
-        'opcache.memory_consumption' => '128',
+        'opcache.memory_consumption' => '256',
         'opcache.max_accelerated_files' => '99000',
         'opcache.enable_cli' => '1',
       },
@@ -37,28 +37,7 @@ class php::params inherits php::globals {
     case $::operatingsystem {
         'Debian', 'Ubuntu': {
           case $global_php_version {
-            /^7/: {
-              $config_root          = "/etc/php/${global_php_version}"
-              $fpm_service_name     = "php${global_php_version}-fpm"
-              $ext_tool_enable      = "/usr/sbin/phpenmod -v ${global_php_version}"
-              $ext_tool_query       = "/usr/sbin/phpquery -v ${global_php_version}"
-              $package_prefix       = "php${global_php_version}-"
-              $fpm_pid_file         = "/run/php/php${global_php_version}-fpm.pid"
-              $fpm_error_log        = "/var/log/php${global_php_version}-fpm.log"
-              # $fpm_default_params   = {
-              #     'user'                 => 'www-data',
-              #     'group'                => 'www-data',
-              #     'listen'               => '/run/php/php7.0-fpm.sock',
-              #     'listen.owner'         => 'www-data',
-              #     'listen.group'         => 'www-data',
-              #     'pm'                   => dynamic,
-              #     'pm.max_children'      => 5,
-              #     'pm.start_servers'     => 2,
-              #     'pm.min_spare_servers' => 1,
-              #     'pm.max_spare_servers' => 3,
-              # }
-            }
-            default: {
+            /^5/: {
               $config_root          = '/etc/php5'
               $fpm_service_name     = 'php5-fpm'
               $fpm_pid_file         = '/run/php5-fpm.pid'
@@ -66,19 +45,15 @@ class php::params inherits php::globals {
               $ext_tool_enable      = '/usr/sbin/php5enmod'
               $ext_tool_query       = '/usr/sbin/php5query'
               $package_prefix       = 'php5-'
-              # $fpm_default_params   = {
-              #     'user'                 => 'www-data',
-              #     'group'                => 'www-data',
-              #     'listen'               => '/var/run/php5-fpm.sock',
-              #     'listen.owner'         => 'www-data',
-              #     'listen.group'         => 'www-data',
-              #     'pm'                   => dynamic,
-              #     'pm.max_children'      => 5,
-              #     'pm.start_servers'     => 2,
-              #     'pm.min_spare_servers' => 1,
-              #     'pm.max_spare_servers' => 3,
-              #     'chdir'                => '/'
-              # }
+            }
+            default: {
+              $config_root          = "/etc/php/${global_php_version}"
+              $fpm_service_name     = "php${global_php_version}-fpm"
+              $ext_tool_enable      = "/usr/sbin/phpenmod -v ${global_php_version}"
+              $ext_tool_query       = "/usr/sbin/phpquery -v ${global_php_version}"
+              $package_prefix       = "php${global_php_version}-"
+              $fpm_pid_file         = "/run/php/php${global_php_version}-fpm.pid"
+              $fpm_error_log        = "/var/log/php${global_php_version}-fpm.log"
             }
           }
           $common_package = ['cli','common']
@@ -114,7 +89,7 @@ class php::params inherits php::globals {
           }
 
           case $::lsbdistcodename {
-              'jessie', 'stretch', 'buster': {
+              'jessie', 'stretch', 'buster', 'bullseye': {
                   $release = $::lsbdistcodename
                   $manage_repos = false
               }

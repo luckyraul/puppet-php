@@ -16,7 +16,8 @@ listen.backlog = <%= @listen_backlog %>
 
 ; Set permissions for unix socket, if one is used. In Linux, read/write
 ; permissions must be set in order to allow connections from a web server. Many
-; BSD-derived systems allow connections regardless of permissions.
+; BSD-derived systems allow connections regardless of permissions. The owner
+; and group can be specified either by name or by their numeric IDs.
 ; Default Values: user and group are set as the running user
 ;                 mode is set to 0660
 <% if @listen_owner -%>
@@ -34,6 +35,11 @@ listen.mode = <%= @listen_mode %>
 <% else -%>
 ;listen.mode = 0660
 <% end -%>
+; When POSIX Access Control Lists are supported you can set them using
+; these options, value is a comma separated list of user/group names.
+; When set, listen.owner and listen.group are ignored
+;listen.acl_users =
+;listen.acl_groups =
 
 ; List of addresses (IPv4/IPv6) of FastCGI clients which are allowed to connect.
 ; Equivalent to the FCGI_WEB_SERVER_ADDRS environment variable in the original
@@ -249,13 +255,13 @@ access.log = <%= @access_log %>
 ;  %d: time taken to serve the request
 ;      it can accept the following format:
 ;      - %{seconds}d (default)
-;      - %{miliseconds}d
+;      - %{milliseconds}d
 ;      - %{mili}d
 ;      - %{microseconds}d
 ;      - %{micro}d
 ;  %e: an environment variable (same as $_ENV or $_SERVER)
 ;      it must be associated with embraces to specify the name of the env
-;      variable. Some exemples:
+;      variable. Some examples:
 ;      - server specifics like: %{REQUEST_METHOD}e or %{SERVER_PROTOCOL}e
 ;      - HTTP headers like: %{HTTP_HOST}e or %{HTTP_USER_AGENT}e
 ;  %f: script filename
@@ -358,7 +364,7 @@ chdir = <%= @chdir %>
 
 ; Redirect worker stdout and stderr into main error log. If not set, stdout and
 ; stderr will be redirected to /dev/null according to FastCGI specs.
-; Note: on highloaded environement, this can cause some delay in the page
+; Note: on highloaded environment, this can cause some delay in the page
 ; process time (several ms).
 ; Default Value: no
 catch_workers_output = <%= @catch_workers_output %>

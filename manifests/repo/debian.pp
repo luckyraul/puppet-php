@@ -50,7 +50,24 @@ class php::repo::debian(
           }
           '7.1', '7.2', '7.3', '7.4': {
               case $::lsbdistcodename {
-                  'jessie', 'stretch', 'buster': {
+                  'jessie', 'stretch', 'buster', 'bullseye': {
+                      $release = $php::params::release
+                      $location = 'https://packages.sury.org/php/'
+                      $repos    = 'main'
+                      $key      = {
+                          'id'     => '15058500A0235D97F5D10063B188E2B695BD4743',
+                          'source' => 'https://packages.sury.org/php/apt.gpg',
+                      }
+                      ensure_packages(['apt-transport-https'], {'ensure' => 'present'})
+                  }
+                  default: {
+                      fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
+                  }
+              }
+          }
+          '8.0': {
+              case $::lsbdistcodename {
+                  'stretch', 'buster', 'bullseye': {
                       $release = $php::params::release
                       $location = 'https://packages.sury.org/php/'
                       $repos    = 'main'
