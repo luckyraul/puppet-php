@@ -18,7 +18,7 @@ class php::newrelic (
     creates  => "${php::params::config_root}/mods-available/newrelic.ini"
   }
 
-  create_ini_settings($settings, {'path' => $configile, require => Exec['newrelic_install']})
+  inifile::create_ini_settings($settings, {'path' => $configile, require => Exec['newrelic_install']})
 
   Package[$package_name] -> Exec['newrelic_install']
 }

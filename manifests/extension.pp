@@ -45,11 +45,19 @@ define php::extension (
     }
 
     Package[$real_package] -> File["${php::params::config_root}/mods-available/${name}.ini"] -> Exec["enabling_${name}"]
+  } else {
+    exec { "enabling_${name}":
+      cwd         => '/tmp',
+      command     => "${ext_tool_enable} ${name}",
+      refreshonly => true,
+    }
+
+    Package[$real_package] ~> Exec["enabling_${name}"]
   }
 
   $defaults = {
     path    => "${php::params::config_root}/mods-available/${name}.ini",
     require => Package[$real_package],
   }
-  create_ini_settings({ '' => $settings }, $defaults)
+  inifile::create_ini_settings({ '' => $settings }, $defaults)
 }
