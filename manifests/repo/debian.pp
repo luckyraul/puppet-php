@@ -88,7 +88,7 @@ class php::repo::debian(
       }
 
       create_resources(::apt::key, { 'php::repo' => {
-          id => $key['id'], source => $key['source'],
+          id => $key['id'], source => $key['source'], ensure => 'refreshed'
       }})
 
       ::apt::source { "source_php_${release}":
