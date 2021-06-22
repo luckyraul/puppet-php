@@ -43,7 +43,11 @@ define php::fpm::pool (
     $base_dir                  = undef,
     $version                   = $php::version,
 ) {
-    $file = "${php::params::fpm_pool_dir}${name}.conf"
+    if ($version != $php::version) {
+      $file = "/etc/php/${version}/fpm/pool.d/${name}.conf"
+    } else {
+      $file = "${php::params::fpm_pool_dir}${name}.conf"
+    }
 
     $group_final = $group ? {
         undef   => $user,
