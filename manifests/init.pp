@@ -47,6 +47,7 @@ class php (
     $docker               = false,
     $settings             = {},
     $extensions           = {},
+    $multi_version        = [],
     ) inherits php::params {
 
     # validate_string($ensure)
