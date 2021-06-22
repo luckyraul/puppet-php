@@ -1,7 +1,7 @@
 # Class php::fpm
 class php::fpm (
     $ensure  = $php::ensure,
-    $pools   = $php::params::fpm_pools,
+    $pools   = $php::fpm_pools,
     $version = $php::version,
 ) inherits php::params {
 

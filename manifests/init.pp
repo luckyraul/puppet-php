@@ -32,6 +32,7 @@ class php (
     $manage_repos         = $php::params::manage_repos,
     $packages             = [],
     $fpm                  = true,
+    $fpm_pools            = $php::params::fpm_pools,
     $fpm_service_ensure   = $php::params::fpm_service_ensure,
     $fpm_service_enable   = $php::params::fpm_service_enable,
     $fpm_service_settings = {},
