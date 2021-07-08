@@ -45,6 +45,7 @@ class php (
     $newrelic_configfile  = $php::params::newrelic_configfile,
     $ioncube              = false,
     $docker               = false,
+    $docker_combo         = false,
     $settings             = {},
     $extensions           = {},
     $multi_version        = [],
@@ -113,5 +114,51 @@ class php (
             mode    => '0755',
             content => template('php/docker/entrypoint.sh.erb'),
         }
+    }
+
+    if $docker_combo {
+        ensure_packages(['git', 'openssh-client','gosu'], {'ensure' => 'present'})
+
+        ensure_packages(['curl'], {'ensure' => 'present'})
+
+        Package['curl'] -> archive { '/tmp/s6.tar.gz':
+            ensure  => 'present',
+            source  => 'https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz',
+            extract      => true,
+            extract_path => '/',
+            creates => '/init'
+        } -> file {'/init':
+            mode  => '0755',
+        }
+
+        file { '/etc/services.d':
+          ensure => directory,
+          owner   => root,
+          group   => root,
+        }
+        file { '/etc/services.d/php-fpm':
+          ensure => directory,
+          owner   => root,
+          group   => root,
+        }
+        file { '/etc/services.d/nginx':
+          ensure => directory,
+          owner   => root,
+          group   => root,
+        }
+        file {'/etc/services.d/php-fpm/run':
+            owner   => root,
+            group   => root,
+            mode    => '0755',
+            content => template('php/docker/run_php.erb'),
+        }
+        file {'/etc/services.d/nginx/run':
+            owner   => root,
+            group   => root,
+            mode    => '0755',
+            content => template('php/docker/run_nginx.erb'),
+        }
+        File['/init'] -> File['/etc/services.d'] -> File['/etc/services.d/php-fpm']
+        File['/etc/services.d'] -> File['/etc/services.d/nginx']
     }
 }
