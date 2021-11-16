@@ -13,41 +13,6 @@ class php::repo::debian(
     if $manage_repos {
 
       case $version {
-          '5.6': {
-              case $::lsbdistcodename {
-                  'wheezy': {
-                      $release  = "${::lsbdistcodename}-php56"
-                      $repos    = 'all'
-                      $location = 'http://packages.dotdeb.org'
-                      $key      = {
-                          'id'     => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
-                          'source' => 'http://www.dotdeb.org/dotdeb.gpg',
-                      }
-                  }
-                  default: {
-                      fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
-                  }
-              }
-          }
-          '7.0': {
-              case $::lsbdistcodename {
-                  'jessie': {
-                      $release = $php::params::release
-                      $repos    = 'all'
-                      $location = 'http://packages.dotdeb.org'
-                      $key      = {
-                          'id'     => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
-                          'source' => 'http://www.dotdeb.org/dotdeb.gpg',
-                      }
-                  }
-                  'stretch': {
-
-                  }
-                  default: {
-                      fail("Unsupported PHP release: ${::lsbdistcodename} - ${version}")
-                  }
-              }
-          }
           '7.1', '7.2', '7.3', '7.4': {
               case $::lsbdistcodename {
                   'jessie', 'stretch', 'buster', 'bullseye': {
@@ -65,7 +30,7 @@ class php::repo::debian(
                   }
               }
           }
-          '8.0': {
+          '8.0', '8.1': {
               case $::lsbdistcodename {
                   'stretch', 'buster', 'bullseye': {
                       $release = $php::params::release
