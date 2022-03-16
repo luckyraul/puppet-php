@@ -56,7 +56,7 @@ class php::params inherits php::globals {
               $fpm_error_log        = "/var/log/php${global_php_version}-fpm.log"
             }
           }
-          $common_package = ['cli','common']
+          $common_package = ['cli','common','xml']
           $dev_package = 'dev'
           $fpm_package = 'fpm'
           $fpm_pool_dir = "${config_root}/fpm/pool.d/"
