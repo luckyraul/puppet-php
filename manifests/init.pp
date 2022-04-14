@@ -114,6 +114,12 @@ class php (
             mode    => '0755',
             content => template('php/docker/entrypoint.sh.erb'),
         }
+
+        file { '/var/www':
+           ensure => directory,
+           owner   => www-data,
+           group   => www-data,
+        }
     }
 
     if $docker_combo {
@@ -157,6 +163,11 @@ class php (
             group   => root,
             mode    => '0755',
             content => template('php/docker/run_nginx.erb'),
+        }
+        file { '/var/www':
+           ensure => directory,
+           owner   => www-data,
+           group   => www-data,
         }
         File['/init'] -> File['/etc/services.d'] -> File['/etc/services.d/php-fpm']
         File['/etc/services.d'] -> File['/etc/services.d/nginx']
