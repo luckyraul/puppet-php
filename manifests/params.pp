@@ -63,9 +63,6 @@ class php::params inherits php::globals {
 
           $fpm_service_settings = {
               daemonize                   => 'yes',
-              file                        => "${config_root}/fpm/php-fpm.conf",
-              pid_file                    => $fpm_pid_file,
-              error_log                   => $fpm_error_log,
               syslog_facility             => 'daemon',
               syslog_ident                => 'php-fpm',
               log_level                   => 'notice',
@@ -76,7 +73,6 @@ class php::params inherits php::globals {
               process_max                 => '0',
               rlimit_files                => nil,
               systemd_interval            => nil,
-              pool_base_dir               => $fpm_pool_dir,
           }
 
           $default_config = {

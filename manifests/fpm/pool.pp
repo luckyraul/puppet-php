@@ -42,13 +42,8 @@ define php::fpm::pool (
     $php_directives            = [],
     $base_dir                  = undef,
     $version                   = $php::version,
+    $other_versions            = $php::multi_version,
 ) {
-    if ($version != $php::version) {
-      $file = "/etc/php/${version}/fpm/pool.d/${name}.conf"
-    } else {
-      $file = "${php::params::fpm_pool_dir}${name}.conf"
-    }
-
     $group_final = $group ? {
         undef   => $user,
         default => $group
@@ -56,22 +51,33 @@ define php::fpm::pool (
 
     $pool = $title
 
-    $real_package = "${php::params::package_prefix}${php::params::fpm_package}"
-
     if ($ensure == 'absent') {
-        file { $file:
-            ensure => $ensure,
-            notify => Class['php::fpm::service'],
+        unique(concat($other_versions, $version)).each |String $value| {
+            file { "/etc/php/${value}/fpm/pool.d/${name}.conf":
+                ensure => $ensure,
+                notify => Class['php::fpm::service'],
+            }
         }
     } else {
-        file { $file:
-            ensure  => file,
-            mode    => '0644',
-            owner   => root,
-            group   => root,
-            notify  => Class['php::fpm::service'],
-            require => Package[$real_package],
-            content => template($template),
+        $real_package = "php${version}-${php::params::fpm_package}"
+
+        unique(concat($other_versions, $version)).each |String $value| {
+            if ($value == $version) {
+                file { "/etc/php/${value}/fpm/pool.d/${name}.conf":
+                  ensure  => file,
+                  mode    => '0644',
+                  owner   => root,
+                  group   => root,
+                  notify  => Class['php::fpm::service'],
+                  require => Package[$real_package],
+                  content => template($template),
+                }
+            } else {
+                file { "/etc/php/${value}/fpm/pool.d/${name}.conf":
+                  ensure => 'absent',
+                  notify => Class['php::fpm::service'],
+                }
+            }
         }
     }
 }
