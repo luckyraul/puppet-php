@@ -64,20 +64,20 @@ class php::params inherits php::globals {
       }
 
       case $facts['os']['distro']['codename'] {
-        'jessie', 'stretch', 'buster', 'bullseye': {
+        'stretch', 'buster', 'bullseye': {
           $release = $facts['os']['distro']['codename']
           $manage_repos = false
         }
-        'xenial': {
+        'xenial', 'bionic', 'focal', 'jammy': {
           $manage_repos = false
         }
         default: {
-          fail("Unsupported release: ${facts['facts['os']['distro']['codename']']}")
+          fail("Unsupported release: ${facts['os']['distro']['codename']}")
         }
       }
     }
     default: {
-      fail("Unsupported os: ${facts['facts['os']['name']']}")
+      fail("Unsupported os: ${facts['os']['name']}")
     }
   }
 

@@ -8,7 +8,7 @@ class php::repo {
       include php::repo::ubuntu
     }
     default: {
-      fail("Unsupported os: ${facts['facts['os']['name']']}")
+      fail("Unsupported os: ${facts['os']['name']}")
     }
   }
 }
