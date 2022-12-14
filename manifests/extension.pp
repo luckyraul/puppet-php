@@ -7,16 +7,15 @@ define php::extension (
   Hash $settings = {},
   $ext_tool_enable = $php::params::ext_tool_enable,
 ) {
-
   Exec {
-    path => ['/bin', '/usr/bin','/usr/sbin']
+    path => ['/bin', '/usr/bin','/usr/sbin'],
   }
 
   if $provider == 'pecl' {
-      $real_package = prefix([$name], "${provider}-")
-      ensure_packages(['build-essential'], {'ensure' => 'present'})
+    $real_package = prefix([$name], "${provider}-")
+    ensure_packages(['build-essential'], { 'ensure' => 'present' })
   } else {
-      $real_package = prefix([$name], $prefix)
+    $real_package = prefix([$name], $prefix)
   }
 
   if $provider {
@@ -33,7 +32,7 @@ define php::extension (
   }
 
   if $provider {
-    file {"${php::params::config_root}/mods-available/${name}.ini":
+    file { "${php::params::config_root}/mods-available/${name}.ini":
       content => "; Managed by puppet\n; priority=${priority}\nextension=${name}.so\n",
       notify  => Exec["enabling_${name}"],
     }
@@ -59,5 +58,5 @@ define php::extension (
     path    => "${php::params::config_root}/mods-available/${name}.ini",
     require => Package[$real_package],
   }
-  inifile::create_ini_settings({ '' => $settings }, $defaults)
+  inifile::create_ini_settings( { '' => $settings }, $defaults)
 }
