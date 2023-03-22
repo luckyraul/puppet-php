@@ -10,9 +10,9 @@ class php::repo::debian (
 
   if $manage_repos {
     case $version {
-      '7.3','7.4', '8.0', '8.1', '8.2': {
+      '7.4', '8.0', '8.1', '8.2': {
         case $facts['os']['distro']['codename'] {
-          'stretch', 'buster', 'bullseye': {
+          'stretch', 'buster', 'bullseye', 'bookworm': {
             $release = $php::params::release
             $location = 'https://packages.sury.org/php/'
             $repos    = 'main'

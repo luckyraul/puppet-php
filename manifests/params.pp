@@ -64,7 +64,7 @@ class php::params inherits php::globals {
       }
 
       case $facts['os']['distro']['codename'] {
-        'stretch', 'buster', 'bullseye': {
+        'stretch', 'buster', 'bullseye', 'bookworm': {
           $release = $facts['os']['distro']['codename']
           $manage_repos = false
         }

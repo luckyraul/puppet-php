@@ -6,8 +6,8 @@ class php::globals (
     '9' => '7.0',
     '10' => '7.3',
     '11' => '7.4',
-    '12' => '8.1',
-    default => '7.4',
+    '12' => '8.2',
+    default => '8.1',
   }
 
   $global_php_version = pick($php_version, $default_php_version)
