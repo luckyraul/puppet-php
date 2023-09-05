@@ -10,7 +10,7 @@ class php::repo::ubuntu (
 
   if $manage_repos {
     case $version {
-      '7.4', '8.0', '8.1', '8.2': {
+      '7.4', '8.0', '8.1', '8.2', '8.3': {
         case $facts['os']['distro']['codename'] {
           'bionic', 'focal', 'jammy': {
             ::apt::ppa { 'ppa:ondrej/php': }

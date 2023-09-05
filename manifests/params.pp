@@ -1,7 +1,7 @@
 # == Class: php::params
 class php::params inherits php::globals {
   $ensure = present
-  $composer_version = '2.2.18'
+  $composer_version = '2.2.21'
   $composer_source  = "https://getcomposer.org/download/${composer_version}/composer.phar"
   $composer_path    = '/usr/local/bin/composer'
 
