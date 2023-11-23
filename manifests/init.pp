@@ -108,18 +108,35 @@ class php (
   }
 
   if $docker_combo {
-    ensure_packages(['git', 'openssh-client','gosu'], { 'ensure' => 'present' })
+    $s6version = '3.1.6.2'
+    stdlib::ensure_packages(['git', 'openssh-client','gosu'], { 'ensure' => 'present' })
 
-    ensure_packages(['curl'], { 'ensure' => 'present' })
+    stdlib::ensure_packages(['curl', 'xz-utils'], { 'ensure' => 'present' })
 
-    Package['curl'] -> archive { '/tmp/s6.tar.gz':
+    archive { '/tmp/s6-overlay-noarch.tar.xz':
       ensure       => 'present',
-      source       => 'https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64.tar.gz',
+      source       => "https://github.com/just-containers/s6-overlay/releases/download/v${s6version}/s6-overlay-noarch.tar.xz",
       extract      => true,
       extract_path => '/',
       creates      => '/init',
+      require      => [
+        Package['curl'],
+        Package['xz-utils']
+      ],
     } -> file { '/init':
       mode  => '0755',
+    }
+
+    archive { '/tmp/s6-overlay-arch.tar.xz':
+      ensure       => 'present',
+      source       => "https://github.com/just-containers/s6-overlay/releases/download/v${s6version}/s6-overlay-${facts['os']['hardware']}.tar.xz",
+      extract      => true,
+      extract_path => '/',
+      creates      => '/command/exec',
+      require      => [
+        Package['curl'],
+        Package['xz-utils']
+      ],
     }
 
     file { '/etc/services.d':
