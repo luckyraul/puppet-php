@@ -14,7 +14,7 @@ class php::repo::ubuntu (
         case $facts['os']['distro']['codename'] {
           'bionic', 'focal', 'jammy': {
             ::apt::ppa { 'ppa:ondrej/php': }
-            ensure_packages(['apt-transport-https'], { 'ensure' => 'present' })
+            stdlib::ensure_packages(['apt-transport-https'], { 'ensure' => 'present' })
           }
           default: {
             fail("Unsupported PHP release: ${facts['os']['distro']['codename']} - ${version}")

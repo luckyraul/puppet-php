@@ -3,7 +3,7 @@ class php::composer (
   $composer_source  = $php::params::composer_source,
   $composer_path    = $php::params::composer_path,
 ) {
-  ensure_packages(['curl'], { 'ensure' => 'present' })
+  stdlib::ensure_packages(['curl'], { 'ensure' => 'present' })
 
   Package['curl'] -> archive { $composer_path:
     ensure => 'present',

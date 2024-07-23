@@ -92,7 +92,7 @@ class php (
   }
 
   if $docker {
-    ensure_packages(['git', 'openssh-client','gosu'], { 'ensure' => 'present' })
+    stdlib::ensure_packages(['git', 'openssh-client','gosu'], { 'ensure' => 'present' })
 
     file { '/entrypoint.sh':
       owner   => root,
