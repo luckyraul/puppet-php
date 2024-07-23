@@ -83,7 +83,7 @@ class php (
     Class['php::packages'] -> class { 'php::dev': } -> Anchor['php::end']
   }
 
-  if $newrelic {
+  if $newrelic and $::facts['os']['architecture'] == 'amd64' {
     Class['php::packages'] -> class { 'php::newrelic': } -> Anchor['php::end']
   }
 
