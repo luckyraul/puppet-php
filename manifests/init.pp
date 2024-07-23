@@ -27,6 +27,7 @@ class php (
   $version              = $php::params::global_php_version,
   $ensure               = $php::params::ensure,
   $manage_repos         = $php::params::manage_repos,
+  $repo_mirror          = $php::params::repo_mirror,
   $packages             = [],
   $fpm                  = true,
   $fpm_pools            = $php::params::fpm_pools,
