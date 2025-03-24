@@ -69,7 +69,7 @@ class php::params inherits php::globals {
           $release = $facts['os']['distro']['codename']
           $manage_repos = false
         }
-        'xenial', 'bionic', 'focal', 'jammy': {
+        'focal', 'jammy', 'noble': {
           $manage_repos = false
         }
         default: {

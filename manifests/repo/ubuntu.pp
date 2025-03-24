@@ -12,7 +12,7 @@ class php::repo::ubuntu (
     case $version {
       '7.4', '8.0', '8.1', '8.2', '8.3', '8.4': {
         case $facts['os']['distro']['codename'] {
-          'bionic', 'focal', 'jammy': {
+          'focal', 'jammy', 'noble': {
             ::apt::ppa { 'ppa:ondrej/php': }
             stdlib::ensure_packages(['apt-transport-https'], { 'ensure' => 'present' })
           }
