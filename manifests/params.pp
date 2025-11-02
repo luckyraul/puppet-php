@@ -2,7 +2,7 @@
 class php::params inherits php::globals {
   $ensure = present
   $repo_mirror = false
-  $composer_version = '2.2.21'
+  $composer_version = '2.2.25'
   $composer_source  = "https://getcomposer.org/download/${composer_version}/composer.phar"
   $composer_path    = '/usr/local/bin/composer'
 
@@ -65,7 +65,7 @@ class php::params inherits php::globals {
       }
 
       case $facts['os']['distro']['codename'] {
-        'stretch', 'buster', 'bullseye', 'bookworm': {
+        'bullseye', 'bookworm', 'trixie': {
           $release = $facts['os']['distro']['codename']
           $manage_repos = false
         }
