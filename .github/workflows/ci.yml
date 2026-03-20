@@ -1,0 +1,13 @@
+---
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - pdk
+
+jobs:
+  puppet:
+    name: Puppet
+    uses: luckyraul/puppet-lab/.github/workflows/test.yml@master
