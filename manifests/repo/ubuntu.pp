@@ -1,44 +1,58 @@
-# == Class: php::repo
+# Configure ubuntu apt repo
+#
+# === Parameters
+#
+# [*manage_repos*]
+#   Location of the apt repository
+#
+# [*mirror*]
+#   Apt repository names
+#
+# [*newrelic*]
+#   Add source source repository
+#
 class php::repo::ubuntu (
-  $version      = $php::version,
-  $manage_repos = $php::manage_repos,
-  $newrelic     = $php::newrelic,
+  Boolean $manage_repos = $php::manage_repos,
+  Boolean $mirror       = $php::repo_mirror,
+  Boolean $newrelic     = $php::newrelic,
 ) {
-  # validate_string($version)
-
+  assert_private()
   include 'apt'
 
   if $manage_repos {
-    case $version {
-      '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5': {
-        case $facts['os']['distro']['codename'] {
-          'focal', 'jammy', 'noble': {
-            ::apt::ppa { 'ppa:ondrej/php': }
-            stdlib::ensure_packages(['apt-transport-https'], { 'ensure' => 'present' })
-          }
-          default: {
-            fail("Unsupported PHP release: ${facts['os']['distro']['codename']} - ${version}")
-          }
-        }
-      }
-      default: {
-        fail("Unsupported PHP release: ${version}")
-      }
+    apt::keyring { 'php-sury.gpg':
+      source => 'https://packages.sury.org/php/apt.gpg',
+    } -> apt::source { 'php-sury':
+      source_format => 'sources',
+      location      => ['https://packages.sury.org/php/'],
+      repos         => ['main'],
+      keyring       => '/etc/apt/keyrings/php-sury.gpg',
+    }
+  } else {
+    apt::keyring { 'php-sury':
+      ensure => 'absent',
+    }
+    apt::source { 'php-sury':
+      ensure => 'absent',
     }
   }
 
   if $newrelic {
+    apt::keyring { 'newrelic.asc':
+      source => 'https://download.newrelic.com/NEWRELIC_APT_2DAD550E.public',
+    } -> apt::source { 'newrelic':
+      source_format => 'sources',
+      location      => ['http://apt.newrelic.com/debian/'],
+      release       => 'newrelic',
+      repos         => ['non-free'],
+      keyring       => '/etc/apt/keyrings/newrelic.asc',
+    }
+  } else {
+    apt::keyring { 'newrelic':
+      ensure => 'absent',
+    }
     apt::source { 'newrelic':
-      location => 'http://apt.newrelic.com/debian/',
-      repos    => 'non-free',
-      key      => {
-        id  => '2EA7DB7738A22D92945E8EC732FA4C172DAD550E',
-        key => 'https://download.newrelic.com/NEWRELIC_APT_2DAD550E.public',
-      },
-      include  => {
-        src => false,
-      },
-      release  => 'newrelic',
+      ensure => 'absent',
     }
   }
 }

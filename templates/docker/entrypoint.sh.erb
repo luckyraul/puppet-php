@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-if [[ "x"$PHPFPM_USER != "x" ]]; then
-  usermod -u $PHPFPM_USER www-data
-  groupmod -g $PHPFPM_USER www-data
-fi
-chown www-data /proc/self/fd/{1,2}
-exec gosu www-data "$@"

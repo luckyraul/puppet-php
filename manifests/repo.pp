@@ -1,4 +1,5 @@
-# == Class: php::repo
+# Configure package repository
+#
 class php::repo {
   case $facts['os']['name'] {
     'Debian': {
