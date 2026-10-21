@@ -7,6 +7,8 @@ class php::repo::debian (
 ) {
   include 'apt'
 
+  $architecture = regsubst($facts['os']['architecture'], '\baarch64\b', 'arm64')
+
   if $manage_repos {
     if ($mirror) {
       $key_name = 'mygento_php'
@@ -36,7 +38,7 @@ class php::repo::debian (
               source_format => 'sources',
               location      => [$location],
               repos         => [$repos],
-              architecture  => [$facts['os']['architecture']],
+              architecture  => [$architecture],
               keyring       => "/etc/apt/keyrings/${key_name}.asc",
             }
           }
@@ -91,7 +93,7 @@ class php::repo::debian (
           release       => 'newrelic',
           location      => ['http://apt.newrelic.com/debian/'],
           repos         => ['non-free'],
-          architecture  => [$facts['os']['architecture']],
+          architecture  => [$architecture],
           keyring       => '/etc/apt/keyrings/newrelic.asc',
         }
       }
