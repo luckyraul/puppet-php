@@ -1,12 +1,22 @@
 # Class php::newrelic
+# === Parameters
+#
+# [*ensure*]
+#   
+# [*package_name*]
+#   
+# [*settings*]
+#   
+# [*configpath*]
+#
 class php::newrelic (
-  $ensure       = 'present',
-  $package_name = 'newrelic-php5',
-  $settings     = $php::newrelic_settings,
-  $configile    = $php::newrelic_configfile,
-) inherits php::params {
+  Enum['absent', 'present', 'latest'] $ensure = $php::package_ensure,
+  String[1] $package_name = 'newrelic-php5',
+  Hash $settings = $php::newrelic_settings,
+  String[1] $configpath = $php::newrelic_configfile,
+) {
   package { $package_name:
-    ensure  => $ensure,
+    ensure => $ensure,
   }
 
   exec { 'newrelic_install':
@@ -14,10 +24,10 @@ class php::newrelic (
     provider => 'shell',
     user     => 'root',
     group    => 'root',
-    creates  => "${php::params::config_root}/mods-available/newrelic.ini",
+    creates  => $configpath,
   }
 
-  inifile::create_ini_settings($settings, { 'path' => $configile, require => Exec['newrelic_install'] })
+  inifile::create_ini_settings($settings, { 'path' => $configpath, require => Exec['newrelic_install'] })
 
   Package[$package_name] -> Exec['newrelic_install']
 }

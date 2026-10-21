@@ -1,10 +1,22 @@
-# Class php::fpm
+# Install and configure php fpm
+#
+# === Parameters
+# [*version*]
+#   Version of packages
+# [*ensure*]
+#   Status of packages
+# [*pools*]
+#   The pool list
+# [*other_versions*]
+#   Version of packages
+#
 class php::fpm (
-  $ensure  = $php::ensure,
-  $pools   = $php::fpm_pools,
-  $version = $php::version,
-  $other_versions = $php::multi_version
-) inherits php::params {
+  String[1] $version = $php::version,
+  Enum['absent', 'present', 'latest'] $ensure = $php::package_ensure,
+  Hash $pools = $php::fpm_pools,
+  Array[String[1]] $other_versions = $php::multi_version
+) {
+  assert_private()
   unique(concat($other_versions, $version)).each |String $value| {
     package { "php${value}-${php::params::fpm_package}" :
       ensure  => $ensure,
@@ -16,7 +28,7 @@ class php::fpm (
 
   $other_versions.each |String $value| {
     php::fpm::pool { "${value}-www":
-      listen  => "/var/run/php-fpm${value}-www.sock",
+      listen  => "/run/php-fpm${value}-www.sock",
       pm      => 'ondemand',
       version => $value,
     }

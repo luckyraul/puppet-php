@@ -1,14 +1,24 @@
-# Class php::composer
+# Install composer package manager
+#
+# === Parameters
+#
+# [*source*]
+#   Holds URL to the Composer source file
+#
+# [*path*]
+#   Holds path to the Composer executable
+#
 class php::composer (
-  $composer_source  = $php::params::composer_source,
-  $composer_path    = $php::params::composer_path,
+  String $source                       = $php::params::composer_source,
+  Stdlib::Absolutepath $path           = $php::params::composer_path,
 ) {
-  stdlib::ensure_packages(['curl'], { 'ensure' => 'present' })
+  assert_private()
 
-  Package['curl'] -> archive { $composer_path:
-    ensure => 'present',
-    source => $composer_source,
-  } -> file { $composer_path:
+  archive { 'download composer':
+    path   => $path,
+    source => $source,
+  } -> file { $path:
     mode  => '0755',
+    owner => root,
   }
 }
