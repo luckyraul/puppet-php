@@ -64,7 +64,7 @@ class php::repo::debian (
     } -> apt::source { 'newrelic':
       source_format => 'sources',
       location      => ['http://apt.newrelic.com/debian/'],
-      release       => 'newrelic',
+      release       => ['newrelic'],
       repos         => ['non-free'],
       architecture  => [$architecture],
       keyring       => '/etc/apt/keyrings/newrelic.asc',

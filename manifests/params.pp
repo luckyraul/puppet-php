@@ -2,7 +2,7 @@
 #
 class php::params inherits php::globals {
   $manage_repos = false
-  $composer_version = '2.2.30'
+  $composer_version = '2.2.32'
   $composer_source  = "https://getcomposer.org/download/${composer_version}/composer.phar"
   $composer_path    = '/usr/local/bin/composer'
   $php_version = $php::globals::globals_php_version
@@ -31,6 +31,8 @@ class php::params inherits php::globals {
       $config_root = "/etc/php/${php_version}"
       $package_prefix = $php::globals::package_prefix
       $common_packages = ['cli','common','xml']
+      $ext_tool_enable = "/usr/sbin/phpenmod -v ${php_version}"
+      $ext_tool_query = "/usr/sbin/phpquery -v ${php_version}"
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

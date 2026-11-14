@@ -19,6 +19,8 @@
 #   to a single php::fpm::pool named www with default parameters.
 # [*fpm_service_settings*]
 #   Fpm Service Settings
+# [*extensions*]
+#   PHP extensions
 # [*composer*]
 #   Install composer flag.
 # [*repo_mirror*]
@@ -56,6 +58,7 @@ class php (
   Enum['running', 'stopped'] $fpm_service_ensure = 'running',
   Hash $fpm_pools = $php::params::fpm_pools,
   Hash $fpm_service_settings = {},
+  Hash $extensions           = {},
   Optional[String[1]] $package_prefix = $php::params::package_prefix,
   Array[String[1]] $multi_version = [],
 ) inherits php::params {
@@ -68,6 +71,12 @@ class php (
   if $newrelic and $::facts['os']['architecture'] == 'amd64' {
     Class['php::packages'] -> class { 'php::newrelic': }
   }
+
+  create_resources('php::extension', $extensions,
+    {
+      require => Class['php::packages'],
+    },
+  )
 
   if $docker { contain 'php::docker' }
 }
