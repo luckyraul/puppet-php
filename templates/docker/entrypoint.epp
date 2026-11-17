@@ -1,9 +1,39 @@
-#!/bin/bash
-set -e
+#!/bin/sh
+set -eu
 
-if [[ "x"$PHPFPM_USER != "x" ]]; then
-  usermod -u $PHPFPM_USER www-data
-  groupmod -g $PHPFPM_USER www-data
+if [ -n "${PHPFPM_USER:-}" ]; then
+    case "$PHPFPM_USER" in
+        *[!0-9]*|'')
+            echo "ERROR: Invalid PHPFPM_USER (must be numeric)" >&2
+            exit 1
+            ;;
+    esac
+
+    if [ "$PHPFPM_USER" -eq 0 ]; then
+        echo "ERROR: PHPFPM_USER cannot be 0" >&2
+        exit 1
+    fi
+
+    if [ "$(id -u)" -eq 0 ]; then
+        CURRENT_UID=$(id -u www-data)
+        CURRENT_GID=$(id -g www-data)
+
+        if [ "$CURRENT_UID" != "$PHPFPM_USER" ]; then
+            usermod -u "$PHPFPM_USER" www-data
+        fi
+
+        if [ "$CURRENT_GID" != "$PHPFPM_USER" ]; then
+            groupmod -g "$PHPFPM_USER" www-data
+        fi
+
+        # chown www-data /proc/self/fd/1 /proc/self/fd/2
+        exec setpriv \
+            --reuid=www-data \
+            --regid=www-data \
+            --init-groups \
+            --no-new-privs \
+            "$@"
+    fi
 fi
-chown www-data /proc/self/fd/1 /proc/self/fd/2
-exec gosu www-data "$@"
+
+exec "$@"

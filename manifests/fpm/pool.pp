@@ -8,6 +8,9 @@
 # [*ensure*]
 #   Remove pool if set to `'absent'`, add otherwise
 #
+# [*pool_chmod*]
+#   Fpm pool file chmod
+#
 # [*listen*]
 #   On what socket to listen for FastCGI connections, i.e.
 #   `'127.0.0.1:9000'' or `'/var/run/php5-fpm.sock'`
@@ -124,6 +127,7 @@
 #   Version of packages
 define php::fpm::pool (
   Enum['present', 'absent'] $ensure                    = 'present',
+  String[4] $pool_chmod                                = $php::fpm_pool_chmod,
   String[1] $listen                                    = '127.0.0.1:9000',
   Integer[-1] $listen_backlog                          = -1,
   Optional[String[1]] $listen_allowed_clients          = undef,
@@ -191,7 +195,7 @@ define php::fpm::pool (
       if ($value == $version) {
         file { "/etc/php/${value}/fpm/pool.d/${name}.conf":
           ensure  => file,
-          mode    => '0640',
+          mode    => $pool_chmod,
           owner   => root,
           group   => root,
           notify  => Class['php::fpm::service'],

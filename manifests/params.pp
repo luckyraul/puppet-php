@@ -10,6 +10,7 @@ class php::params inherits php::globals {
   $fpm_user  = 'www-data'
   $fpm_group = 'www-data'
   $fpm_package = 'fpm'
+  $fpm_pool_chmod = '0640'
   $fpm_pools   = { 'www' => {} }
 
   $fpm_service_settings = {
